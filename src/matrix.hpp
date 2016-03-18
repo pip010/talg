@@ -1,14 +1,13 @@
+#pragma once
 
 
 #include <initializer_list>
-
 #include <array>
-
 #include <iostream>
-
 #include <cassert>
-
 #include <cmath>
+
+#include <vector.hpp>
 
 namespace talg
 {
@@ -38,7 +37,7 @@ namespace talg
 			
 			Tdata(const std::initializer_list<T>&& il)
 			{
-				//std::copy(il.begin(), il.end(), data.begin());
+				std::copy(il.begin(), il.end(), data.begin());
 			}
 		};
 		
@@ -58,7 +57,7 @@ namespace talg
 
 			//http://stackoverflow.com/questions/15848781/constructor-for-nested-initializer-lists
 
-			Tdata(std::array<std::array<T, 4>, 4>&& m) : map{ m }
+			Tdata(std::array<std::array<T, 4>, 4>&& m) : map( m )
 			{
 			}
 		};
@@ -73,5 +72,20 @@ namespace talg
 		using details::Tdata<R,C,T>::Tdata;//forward brace initializer
 		
 		//using details::Tdata<R,C,T>::data;
+		
+		//friend TVector<4,4,T> operator*(const TMatrix<R,C,T>& m, const <4,4,T>& rhs);
 	};
+	
+	//template<typename Tm>
+	template<typename T, typename Tcat>
+	TVector<4, T, Tcat> operator*(const TMatrix<4,4,T>& m, const TVector<4, T, Tcat>& vec)
+	{
+		return {
+			m.map[0][0]*vec[0] + m.map[0][1]*vec[1] + m.map[0][2]*vec[2] + m.map[0][3]*vec[3],
+			m.map[1][0]*vec[0] + m.map[1][1]*vec[1] + m.map[1][2]*vec[2] + m.map[1][3]*vec[3],
+			m.map[2][0]*vec[0] + m.map[2][1]*vec[1] + m.map[2][2]*vec[2] + m.map[2][3]*vec[3],
+			m.map[3][0]*vec[0] + m.map[3][1]*vec[1] + m.map[3][2]*vec[2] + m.map[3][3]*vec[3]
+		};
+	}
+	
 }

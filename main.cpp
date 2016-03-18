@@ -116,6 +116,9 @@ void test_func_modify_c(double* array, size_t size)
 int main()
 {
 	using namespace talg;
+	
+	//exercise : http://en.cppreference.com/w/cpp/language/aggregate_initialization
+	
 
 	TVector<3, long long, vtag_ijk> ijk1;
 	TVector<3, long long, vtag_ijk> ijk2{1,2,3};
@@ -147,7 +150,7 @@ int main()
 	
 	
 
-	//TVector<5, double> vec5_XXXX  { 1.1,2.2,3.3,4.4,5.5,6.6 }; // COMPILES :(
+	//TVector<5, double> vec5_XXXX  { 1.1,2.2,3.3,4.4,5.5,6.6 }; // COMPILES :( runtime-err :(
 	
 	TVector<5, double> vec5_XXXX{ 1.1,2.2,3.3,4.4,5.5 };
 
@@ -172,7 +175,11 @@ int main()
 	if (ijk1 == ijk2)
 		std::cout << "Comparing integral types is fine..." << std::endl;
 
-	TMatrix<4,4,double> mat1;
+	TMatrix<4,4,double> mat1{};
+	mat1.map[0][0] = 1.0;
+	mat1.map[1][1] = 1.0;
+	mat1.map[2][2] = 1.0;
+	mat1.map[3][3] = 1.0;
 
 
 	//UGLYYYYY
@@ -182,6 +189,9 @@ int main()
 		{ 1.1,2.2,3.3,4.4 },
 		{ 1.1,2.2,3.3,4.4 }
 	}} };
+	
+	
+	TMatrix<5,5,double> mat3{};
 
 	//std::array<std::array<double, 4>, 4> m{ {
 	//	{ 1.1,2.2,3.3,4.4 },
@@ -189,6 +199,12 @@ int main()
 	//	{ 1.1,2.2,3.3,4.4 },
 	//	{ 1.1,2.2,3.3,4.4 }
 	//} };
+	
+	PrintTypeTraits< TMatrix<5,5,double> >();
+
+	auto vec44 = mat1 * vec4;
+	
+	std::cout << vec44<< std::endl;
 
     return 0;
 }
