@@ -29,15 +29,7 @@ ClassName ClassName::operator symbol(const ClassName& rhs) const
 
 ////////////////////////////////////////////////////////
 
-void test_func_print_c(double* array, size_t size)
-{
-	for(size_t i = 0; i < size; ++i)
-	{
-		std::cout << array[i] << " ";
-	}
-	
-	std::cout << std::endl;
-}
+
 
 #include <type_traits>
 #include <typeinfo>
@@ -49,6 +41,7 @@ void PrintTypeTraits(void)
 	
 	cout << endl;
 	cout << "Type: " << typeid(T).name() << endl;
+	cout << "Size: " << sizeof(T) << endl;
 	cout << endl;
 	cout << "Type properties:" << endl;
 	cout << "is_abstract: " << is_abstract<T>::value << endl;
@@ -102,9 +95,31 @@ void PrintTypeTraits(void)
 
 }
 
+void test_func_print_c(const double* array, size_t size)
+{
+	for (size_t i = 0; i < size; ++i)
+	{
+		std::cout << array[i] << " ";
+	}
+
+	std::cout << std::endl;
+}
+
+void test_func_modify_c(double* array, size_t size)
+{
+	for (size_t i = 0; i < size; ++i)
+	{
+		array[i] = (double)i;
+	}
+}
+
 int main()
 {
 	using namespace talg;
+
+	TVector<3, long long, vtag_ijk> ijk1;
+	TVector<3, long long, vtag_ijk> ijk2{1,2,3};
+
 	
 	TVector<3, double, vtag_xyz> vec3{ 1.1,2.2,3.3};
 
@@ -132,8 +147,10 @@ int main()
 	
 	
 
-	TVector<5, double> vec5_XXXX  { 1.1,2.2,3.3,4.4,5.5,6.6 }; // COMPILES :(
+	//TVector<5, double> vec5_XXXX  { 1.1,2.2,3.3,4.4,5.5,6.6 }; // COMPILES :(
 	
+	TVector<5, double> vec5_XXXX{ 1.1,2.2,3.3,4.4,5.5 };
+
 	std::cout << vec3.x << std::endl;
 	
 	std::cout << vec5_XXXX[0] << std::endl;
@@ -142,28 +159,38 @@ int main()
 	
 	auto mag = magnitude(vec4);
 	
-	test_func_print_c(vec5_XXXX.data.begin(), vec5_XXXX.size());
+	test_func_modify_c(vec5_XXXX, vec5_XXXX.size());
+
+	test_func_print_c(vec5_XXXX, vec5_XXXX.size());
 	
 	PrintTypeTraits<TVector<3, double, vtag_xyz> >();
 	
 	
-	//if(vec4 == vec4_UND) // NOT COMPILE :)
-	//std::cout << "\n\nXXXX\n\n";
+	//if(vec4 == vec4_UND) 
+		// NOT COMPILE :) comparing non-integral is forbiden
+
+	if (ijk1 == ijk2)
+		std::cout << "Comparing integral types is fine..." << std::endl;
 
 	TMatrix<4,4,double> mat1;
 
 
+	//UGLYYYYY
+	TMatrix<4, 4, double> mat2{ {{
+		{1.1,2.2,3.3,4.4},
+		{ 1.1,2.2,3.3,4.4 },
+		{ 1.1,2.2,3.3,4.4 },
+		{ 1.1,2.2,3.3,4.4 }
+	}} };
+
+	//std::array<std::array<double, 4>, 4> m{ {
+	//	{ 1.1,2.2,3.3,4.4 },
+	//	{ 1.1,2.2,3.3,4.4 },
+	//	{ 1.1,2.2,3.3,4.4 },
+	//	{ 1.1,2.2,3.3,4.4 }
+	//} };
+
     return 0;
 }
 
-//http://christophercrouzet.com/blog/post/2015/01/12/Nested-Initializer-Lists-for-Multidimensional-Arrays
-/*
-if (values.size() > size()) {
-std::ostringstream message;
-message << "Elements in excess: "
-<< "expected " << size() << ", "
-<< "got " << values.size() << ".";
 
-throw std::invalid_argument(message.str());
-}
-*/

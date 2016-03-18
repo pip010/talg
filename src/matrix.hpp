@@ -1,5 +1,6 @@
-#include <initializer_list>
 
+
+#include <initializer_list>
 
 #include <array>
 
@@ -11,12 +12,27 @@
 
 namespace talg
 {
+	//http://christophercrouzet.com/blog/post/2015/01/12/Nested-Initializer-Lists-for-Multidimensional-Arrays
+	/*
+	if (values.size() > size()) {
+	std::ostringstream message;
+	message << "Elements in excess: "
+	<< "expected " << size() << ", "
+	<< "got " << values.size() << ".";
+
+	throw std::invalid_argument(message.str());
+	}
+	*/
+
 	namespace details
 	{   
 		template<size_t R,size_t C, typename T>
 		struct Tdata
 		{	
-			std::array<T, R*C> data;
+			union {
+				std::array<T, R*C> data;
+				std::array<std::array<T, C>, R> map;
+			};
 
 			Tdata() = default;
 			
@@ -36,9 +52,14 @@ namespace talg
 			
 			Tdata() = default;
 			
-			Tdata(const std::initializer_list<T>&& il)
+			//Tdata(T args[4*4]) 
+			//{
+			//}
+
+			//http://stackoverflow.com/questions/15848781/constructor-for-nested-initializer-lists
+
+			Tdata(std::array<std::array<T, 4>, 4>&& m) : map{ m }
 			{
-				//std::copy(il.begin(), il.end(), data.begin());
 			}
 		};
     
