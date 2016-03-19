@@ -127,7 +127,7 @@ namespace talg
 			return data.data();
 		}
 
-		T& operator[](int index)
+		T& operator[](size_t index)
 		{
 			//out of range check DEBUG
 			assert(index < N && "INDEX OUT OF RANGE");
@@ -135,7 +135,7 @@ namespace talg
 			return data[index];
 		}
 
-		const T& operator[](int index) const
+		const T& operator[](size_t index) const
 		{
 			//out of range check DEBUG
 			assert(index < N && "INDEX OUT OF RANGE");
@@ -147,67 +147,6 @@ namespace talg
 		{
 			return data.size();
 		}
-
-		
-
-		/*
-		inline nVector4 operator*(Real val) const
-		{
-			return nVector4(x*val, y*val, z*val);
-		}
-
-		inline nVector4 operator/(Real val) const
-		{
-			assert(val != 0);// Division by 0 exception
-			return nVector4 (x/val, y/val, z/val);
-		}
-		inline void operator/=(Real val)
-		{
-			assert(val != 0);// Division by 0 exception
-			this->x /= val;
-			this->y /= val;
-			this->z /= val;
-		}
-		inline nVector4 operator+(const nVector4& other) const
-		{
-			return nVector4 (this->x + other.x, this->y + other.y, this->z + other.z);
-		}
-		inline void operator+=(const nVector4& other)
-		{
-			this->x += other.x;
-			this->y += other.y;
-			this->z += other.z;
-		}
-
-		inline nVector4 operator-(const nVector4& other) const
-		{
-			return nVector4 (this->x - other.x, this->y - other.y, this->z - other.z);
-		}
-		inline void operator*=(Real val)
-		{
-			x *= val;
-			y *= val;
-			z *= val;
-		}
-		inline nVector4 operator-() const
-		{
-			return nVector4(-x, -y, -z);
-		}
-		inline bool operator==(const nVector4 &other) const
-		{
-			if ((std::abs(x - other.x) < EPS) &&
-				(std::abs(y - other.y) < EPS) &&
-				(std::abs(z - other.z) < EPS))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		* */
-
 
 
 	};
@@ -227,6 +166,7 @@ namespace talg
 	//forbiden for reals
 	//inline bool operator==(const X& lhs, const X& rhs){ /* do actual comparison */ }
 	//inline bool operator!=(const X& lhs, const X& rhs){ return !(lhs == rhs); }
+	
 	// WOW it worked gcc error : note:   template argument deduction/substitution failed:
 	template<int N, typename T, typename Tcat>
 	bool operator==(const T& lhs, const typename std::enable_if<std::is_integral<T>::value, T>::type& rhs)

@@ -171,7 +171,6 @@ int main()
 	
 	//if(vec4 == vec4_UND) 
 		// NOT COMPILE :) comparing non-integral is forbiden
-
 	if (ijk1 == ijk2)
 		std::cout << "Comparing integral types is fine..." << std::endl;
 
@@ -190,6 +189,10 @@ int main()
 		{ 1.1,2.2,3.3,4.4 }
 	}} };
 	
+	std::cout << mat2 << std::endl;
+	std::cout << mat2[1][1] << std::endl;
+	std::cout << mat2(0,0) << std::endl;
+	std::cout << mat2.data[3] << std::endl;
 	
 	TMatrix<5,5,double> mat3{};
 

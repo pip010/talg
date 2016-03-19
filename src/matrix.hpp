@@ -62,7 +62,7 @@ namespace talg
 			}
 		};
     
-	}
+	}//details
 	
 	template<size_t R,size_t C, typename T>
 	struct TMatrix : public details::Tdata<R,C,T>
@@ -71,12 +71,56 @@ namespace talg
 
 		using details::Tdata<R,C,T>::Tdata;//forward brace initializer
 		
-		//using details::Tdata<R,C,T>::data;
+		using details::Tdata<R,C,T>::data;
+		using details::Tdata<R,C,T>::map;
 		
-		//friend TVector<4,4,T> operator*(const TMatrix<R,C,T>& m, const <4,4,T>& rhs);
+		std::array<T,4>& operator[](size_t index_row)
+		{
+			//out of range check DEBUG
+			assert(index_row < R && "INDEX OUT OF RANGE");
+			return map[index_row];
+		}
+
+		const std::array<T,4>& operator[](size_t index_row) const
+		{
+			//out of range check DEBUG
+			assert(index_row < R && "INDEX OUT OF RANGE");
+			return map[index_row];
+		}
+		
+		T& operator()(size_t index_row, size_t index_col)
+		{
+			//out of range check DEBUG
+			assert(index_row < R && "INDEX OUT OF RANGE");
+			assert(index_col < C && "INDEX OUT OF RANGE");
+			return map[index_row][index_col];
+		}
+
+		const T& operator()(size_t index_row, size_t index_col) const
+		{
+			//out of range check DEBUG
+			assert(index_row < R && "INDEX OUT OF RANGE");
+			assert(index_col < C && "INDEX OUT OF RANGE");
+			return map[index_row][index_col];
+		}
+		
 	};
 	
-	//template<typename Tm>
+    
+    //TODO >>    
+    template<size_t R,size_t C, typename T>
+	std::ostream& operator << (std::ostream &o, const TMatrix<R,C,T>& m)
+	{
+		o << "mat(|";
+
+		for (auto a : m.data)
+			o << a << "|";
+
+		o << ")";
+
+		return o;
+	}
+	
 	template<typename T, typename Tcat>
 	TVector<4, T, Tcat> operator*(const TMatrix<4,4,T>& m, const TVector<4, T, Tcat>& vec)
 	{
