@@ -11,21 +11,6 @@
 
 using namespace std;
 
-/*
-ClassName ClassName::operator symbol(const ClassName& rhs) const
-   {
-   ClassName result = *this;     // Declare a temporary object to hold the result and
-                                 // initialize it with the left operand
-
-   // Perform arithmetic with result and rhs, storing result in result
-
-   // Return the temporary result
-
-   return result;
-   }
-*/
-
-
 
 ////////////////////////////////////////////////////////
 

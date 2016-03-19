@@ -107,7 +107,7 @@ namespace talg
 	};
 	
     
-    //TODO >>    
+    //TODO operator >>    
     template<size_t R,size_t C, typename T>
 	std::ostream& operator << (std::ostream &o, const TMatrix<R,C,T>& m)
 	{

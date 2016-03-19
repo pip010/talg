@@ -131,7 +131,6 @@ namespace talg
 		{
 			//out of range check DEBUG
 			assert(index < N && "INDEX OUT OF RANGE");
-
 			return data[index];
 		}
 
@@ -139,7 +138,20 @@ namespace talg
 		{
 			//out of range check DEBUG
 			assert(index < N && "INDEX OUT OF RANGE");
+			return data[index];
+		}
+		
+		T& operator()(size_t index)
+		{
+			//out of range check DEBUG
+			assert(index < N && "INDEX OUT OF RANGE");
+			return data[index];
+		}
 
+		const T& operator()(size_t index) const
+		{
+			//out of range check DEBUG
+			assert(index < N && "INDEX OUT OF RANGE");
 			return data[index];
 		}
 
