@@ -167,12 +167,21 @@ int main()
 
 
 	//UGLYYYYY
+	
 	TMatrix<4, 4, double> mat2{ {{
 		{1.1,2.2,3.3,4.4},
 		{ 1.1,2.2,3.3,4.4 },
 		{ 1.1,2.2,3.3,4.4 },
 		{ 1.1,2.2,3.3,4.4 }
 	}} };
+	
+	
+	TMatrix<2, 3, double> mat222 = {
+		{1.1,2.2,3.3,
+		 1.1,2.2,3.3 }
+	};
+
+	//auto aaaaaa = mat222 * mat222; // NO COMPILE :)
 	
 	std::cout << mat2 << std::endl;
 	std::cout << mat2[1][1] << std::endl;
@@ -191,8 +200,14 @@ int main()
 	PrintTypeTraits< TMatrix<5,5,double> >();
 
 	auto vec44 = mat1 * vec4;
-	
 	std::cout << vec44<< std::endl;
+	
+	auto mat44 = mat2 * mat1;
+	std::cout << mat44<< std::endl;
+	
+	auto mat55 = mat3 * mat3;
+	std::cout << mat55<< std::endl;
+	
 
     return 0;
 }

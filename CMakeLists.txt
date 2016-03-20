@@ -16,3 +16,12 @@ add_executable(talg main.cpp ${SrcFolderListing})
 
 set_property(TARGET talg PROPERTY CXX_STANDARD 11)
 set_property(TARGET talg PROPERTY CXX_STANDARD_REQUIRED ON)
+
+
+ 
+
+
+# Includes Catch in the project:
+#add_subdirectory(${EXT_PROJECTS_DIR}/catch)
+#include_directories(${CATCH_INCLUDE_DIR} ${COMMON_INCLUDES})
+#enable_testing(true)
