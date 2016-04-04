@@ -18,8 +18,6 @@ namespace talg
 
 	namespace query
 	{
-		// Armadilo 
-		// http://arma.sourceforge.net/docs.html#syntax
 		
 		struct q_end {};
 		
@@ -47,22 +45,24 @@ namespace talg
 	namespace details
 	{   
 		
-		
-		
+				
 		template<size_t R,size_t C, typename T>
 		struct Tdata
 		{	
 			union {
-				std::array<T, R*C> data;
-				std::array<std::array<T, C>, R> map;
+				T data[R*C];
+				T map[R][C];
+				//std::array<T, R*C> data;
+				//std::array<std::array<T, C>, R> map;
 			};
 
 			Tdata() = default;
 			
 			Tdata(const std::initializer_list<T>&& il)
 			{
-				std::copy(il.begin(), il.end(), data.begin());
-
+				//std::copy(il.begin(), il.end(), data.begin());
+				std::copy(il.begin(), il.end(), data);
+				
 				/*
 				if (values.size() > size()) {
 				std::ostringstream message;
@@ -74,15 +74,42 @@ namespace talg
 				}
 				*/
 			}
+			
+			//template<typename ...T>
+			//Tdata(T&&...t):m_array{ std::forward<T>(t)... } 
+			//{
+			//}
+			
+			
+			/*
+			//http://christophercrouzet.com/blog/post/2015/01/12/Nested-Initializer-Lists-for-Multidimensional-Arrays
+			//http://www.informit.com/articles/article.aspx?p=1852519
+			//http://stackoverflow.com/questions/15848781/constructor-for-nested-initializer-lists
+			Tdata(const std::initializer_list< std::initializer_list<T> >&& ill)
+			{
+				//std::copy(il.begin(), il.end(), data.begin());l
+				//std::copy(il.begin(), il.end(), data);
+				size_t s = 0;
+				for(auto& il : ill)
+				{
+					std::copy(il.begin(), il.end(), data[s]);
+					++s;
+				}
+			}
+			*/
+			
 		};
 		
 		template<typename T>
 		struct Tdata<4,4,T>
 		{	
 			union{
-				std::array<T, 4*4> data;
-				std::array<std::array<T, 4>, 4> map;
-					struct {
+				//std::array<T, 4*4> data;
+				TVector<4, TVector<4, T, vtag>, vtag> amap;
+				T data[4*4];
+				T map[4][4];
+						
+				struct {
 					   T M00, M01, M02, M03,
 						 M10, M11, M12, M13,
 						 M20, M21, M22, M23,
@@ -91,13 +118,28 @@ namespace talg
 			};
 			
 			Tdata() = default;
-
-			//http://stackoverflow.com/questions/15848781/constructor-for-nested-initializer-lists
-
-			//Tdata(std::array<T,4*4>&& l) : data( l )
+			
+			/*
+			Tdata(
+				T m00, T m01, T m02, T m03, 
+				T m10, T m11, T m12, T m13,
+				T m20, T m21, T m22, T m23, 
+				T m30, T m31, T m32, T m33):
+				M00(m00), M01(m01), M02(m02), M03(m03),
+				M10(m10), M11(m11), M12(m12), M13(m13),
+				M20(m20), M21(m21), M22(m22), M23(m23),
+				M30(m30), M31(m31), M32(m32), M33(m33)
+			{}
+			*/
+			
+					
+			//Tdata(std::array<std::array<T, 4>, 4>&& m) : 
+			//	data( m )
 			//{}
-
-			Tdata(std::array<std::array<T, 4>, 4>&& m) : map( m )
+			
+			
+			Tdata(TVector<4, TVector<4, T, vtag>, vtag>&& m) : 
+				amap( m )
 			{}
 		};
     
@@ -113,19 +155,21 @@ namespace talg
 		using details::Tdata<R,C,T>::data;
 		using details::Tdata<R,C,T>::map;
 		
-		std::array<T,4>& operator[](size_t index_row)
+		
+		T* operator[](size_t index_row)
 		{
 			//out of range check DEBUG
 			assert(index_row < R && "INDEX OUT OF RANGE");
 			return map[index_row];
 		}
 
-		const std::array<T,4>& operator[](size_t index_row) const
+		const T* operator[](size_t index_row) const
 		{
 			//out of range check DEBUG
 			assert(index_row < R && "INDEX OUT OF RANGE");
 			return map[index_row];
 		}
+		
 		
 		//basic
 		T& operator()(size_t index_row, size_t index_col)
@@ -184,6 +228,7 @@ namespace talg
                   }
           }
           
+          //TODO in order to support larger static/dynamic matrices
           //http://functionspace.com/articles/40/Cache-aware-Matrix-Multiplication---Naive-isn--039;t-that-bad-
           
           /*
@@ -206,10 +251,7 @@ namespace talg
 	TMatrix<4,4,T> operator*(const TMatrix<4,4,T>& lhs, const TMatrix<4,4,T>& rhs)
 	{
 		
-		//both of those work!! but i need 2x extra {{
-		//return {{{{ 1.0 , 2.0, 3.0, 4.0},{  1.0 , 2.0, 3.0, 4.0},{  1.0 , 2.0, 3.0, 4.0},{  1.0 , 2.0, 3.0, 4.0}}}};
-		//return {{{1.0 , 2.0, 3.0, 4.0,  1.0 , 2.0, 3.0, 4.0, 1.0 , 2.0, 3.0, 4.0,  1.0 , 2.0, 3.0, 4.0}}};
-		
+
 		return 	{{{
 				lhs.M00*rhs.M00 + lhs.M01*rhs.M10 + lhs.M02*rhs.M20 + lhs.M03*rhs.M30,
 				lhs.M00*rhs.M01 + lhs.M01*rhs.M11 + lhs.M02*rhs.M21 + lhs.M03*rhs.M31,

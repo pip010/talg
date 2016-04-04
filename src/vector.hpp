@@ -45,8 +45,8 @@ namespace talg
 	template<int N, typename T, typename Tcat>
 	struct Tdata
 	{
-		std::array<T, N> data;
-		//T data[N];
+		//std::array<T, N> data;
+		T data[N];
 
 		Tdata() = default;
 
@@ -56,7 +56,8 @@ namespace talg
 
 		Tdata(const std::initializer_list<T>&& il)
 		{
-			std::copy(il.begin(), il.end(), data.begin());
+			//std::copy(il.begin(), il.end(), data.begin());
+			std::copy(il.begin(), il.end(), data);
 		}
 	};
 
@@ -65,7 +66,8 @@ namespace talg
 	{
 		union {
 			struct { T i; T j; T k; };
-			std::array<T, 3> data;
+			//std::array<T, 3> data;
+			T data[3];
 		};
 
 		Tdata() = default;
@@ -80,8 +82,8 @@ namespace talg
 	{
 		union {
 			struct { T x; T y; T z; };
-			std::array<T, 3> data;
-			//T data[N];
+			//std::array<T, 3> data;
+			T data[3];
 		};
 
 		Tdata() = default;
@@ -96,12 +98,14 @@ namespace talg
 	{
 		union {
 			struct { T x; T y; T z; T w; };
-			std::array<T, 4> data;
+			//std::array<T, 4> data;
+			T data[4];
 		};
 
 		Tdata() = default;
 
-		Tdata(T t1, T t2, T t3, T t4) : x(t1), y(t2), z(t3), w(t4)
+		Tdata(T t1, T t2, T t3, T t4) : 
+			x(t1), y(t2), z(t3), w(t4)
 		{
 		}
 	};
@@ -115,17 +119,16 @@ namespace talg
 		
 		using Tdata<N, T, Tcat>::data;
 
+		//TODO most likely drop it, no colapse to pointer, use inner data member
 		//http://en.cppreference.com/w/cpp/language/cast_operator
-
-		operator const T*() const 
-		{ 
-			return data.data();
-		}
-
-		operator T*()
-		{
-			return data.data();
-		}
+		//operator const T*() const 
+		//{ 
+		//	return data.data();
+		//}
+		//operator T*()
+		//{
+		//	return data.data();
+		//}
 
 		T& operator[](size_t index)
 		{
@@ -155,9 +158,9 @@ namespace talg
 			return data[index];
 		}
 
-		size_t size() const
+		constexpr size_t size() const
 		{
-			return data.size();
+			return N;
 		}
 
 
@@ -181,7 +184,7 @@ namespace talg
 	
 	// WOW it worked gcc error : note:   template argument deduction/substitution failed:
 	template<int N, typename T, typename Tcat>
-	bool operator==(const T& lhs, const typename std::enable_if<std::is_integral<T>::value, T>::type& rhs)
+	bool operator==(const TVector<N, T, Tcat>& lhs, const typename std::enable_if<std::is_integral<T>::value, TVector<N, T, Tcat> >::type& rhs)
 	{
 		for (size_t i = 0; i < N; i++)
 		{
@@ -193,7 +196,7 @@ namespace talg
 	}
 
 	template<int N, typename T, typename Tcat>
-	bool operator!=(const T& lhs, const typename std::enable_if<std::is_integral<T>::value, T>::type& rhs)
+	bool operator!=(const TVector<N, T, Tcat>& lhs, const TVector<N, T, Tcat>& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -251,7 +254,7 @@ namespace talg
 	TVector<N, T, Tcat>& operator*=(TVector<N, T, Tcat> &lhs, const T& rhs)
 	{
 
-		for (int i = 0; i < N; i++)
+		for (size_t i = 0; i < N; i++)
 		{
 			lhs[i] = lhs[i] * rhs;
 		}
