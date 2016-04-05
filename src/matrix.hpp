@@ -319,13 +319,14 @@ namespace talg
 
 	//Builds Matrix minor via inclusive explicit defenition of row-columns
 	template<typename T>
-	T minor(const TMatrix<4, 4, T>& m,
+	T build_minor(const TMatrix<4, 4, T>& m,
 		const size_t r0, const size_t r1, const size_t r2,
 		const size_t c0, const size_t c1, const size_t c2)
 	{
-		return m[r0][c0] * (m[r1][c1] * m[r2][c2] - m[r2][c1] * m[r1][c2]) -
+		T ret = (m[r0][c0] * (m[r1][c1] * m[r2][c2] - m[r2][c1] * m[r1][c2]) -
 			m[r0][c1] * (m[r1][c0] * m[r2][c2] - m[r2][c0] * m[r1][c2]) +
-			m[r0][c2] * (m[r1][c0] * m[r2][c1] - m[r2][c0] * m[r1][c1]);
+			m[r0][c2] * (m[r1][c0] * m[r2][c1] - m[r2][c0] * m[r1][c1]) );
+		return ret;
 	}
 
 	/*
@@ -369,10 +370,10 @@ namespace talg
 	template<typename T>
 	T determinant(const TMatrix<4, 4, T>& m)
 	{
-		return m[0][0] * minor(m, 1, 2, 3, 1, 2, 3) -
-			m[0][1] * minor(m, 1, 2, 3, 0, 2, 3) +
-			m[0][2] * minor(m, 1, 2, 3, 0, 1, 3) -
-			m[0][3] * minor(m, 1, 2, 3, 0, 1, 2);
+		return m[0][0] * build_minor(m, 1, 2, 3, 1, 2, 3) -
+			m[0][1] * build_minor(m, 1, 2, 3, 0, 2, 3) +
+			m[0][2] * build_minor(m, 1, 2, 3, 0, 1, 3) -
+			m[0][3] * build_minor(m, 1, 2, 3, 0, 1, 2);
 	}
 
 	template<typename T>
@@ -400,7 +401,7 @@ namespace talg
 			(m.M01*m.M22*m.M30 - m.M02*m.M21*m.M30 + m.M02*m.M20*m.M31 - m.M00*m.M22*m.M31 - m.M01*m.M20*m.M32 + m.M00*m.M21*m.M32) / det,
 			(m.M02*m.M11*m.M30 - m.M01*m.M12*m.M30 - m.M02*m.M10*m.M31 + m.M00*m.M12*m.M31 + m.M01*m.M10*m.M32 - m.M00*m.M11*m.M32) / det,
 			(m.M01*m.M12*m.M20 - m.M02*m.M11*m.M20 + m.M02*m.M10*m.M21 - m.M00*m.M12*m.M21 - m.M01*m.M10*m.M22 + m.M00*m.M11*m.M22) / det
-		}
+		};
 	}
 
 
