@@ -9,6 +9,8 @@ SET(SrcFolderListing
 src/matrix.hpp
 src/vector.hpp
 src/scalar.hpp
+src/algo.h
+src/algo.cpp
 )
 
 include_directories(tests)

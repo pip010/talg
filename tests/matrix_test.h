@@ -14,16 +14,24 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
 	mat1.map[2][2] = 1.0;
 	mat1(3,3) = 1.0;
 
-
-	//UGLYYYYY
-	//but there is hope, see c++17
-	//http://en.cppreference.com/w/cpp/language/aggregate_initialization
-	TMatrix<4, 4, double> mat2={{
+	std::array<std::array<double, 4>, 4> xxx = { {
 		{ 1.1,2.2,3.3,4.4 },
 		{ 1.1,2.2,3.3,4.4 },
 		{ 1.1,2.2,3.3,4.4 },
 		{ 1.1,2.2,3.3,4.4 }
-	}};
+		} };
+
+	//UGLYYYYY
+	//but there is hope, see c++17
+	//http://en.cppreference.com/w/cpp/language/aggregate_initialization
+	TMatrix<4, 4, double> mat2( { {
+		{ 1.1,2.2,3.3,4.4 },
+		{ 1.1,2.2,3.3,4.4 },
+		{ 1.1,2.2,3.3,4.4 },
+		{ 1.1,2.2,3.3,4.4 }
+	}});
+
+
 	
 	
 	TMatrix<2, 3, double> mat222 = {
@@ -73,5 +81,8 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
     
     SECTION( "basic algebra ops" )
     {
+		auto tmat2 = transpose(mat2);
+		auto det = determinant(mat2);
+		auto imat2 = inverse(mat2);
 	}
 }

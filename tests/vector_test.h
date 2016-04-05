@@ -2,23 +2,8 @@
 
 #include <vector.hpp>
 
-void test_func_print_c(const double* array, size_t size)
-{
-	for (size_t i = 0; i < size; ++i)
-	{
-		std::cout << array[i] << " ";
-	}
+#include "helpers.h"
 
-	std::cout << std::endl;
-}
-
-void test_func_modify_c(double* array, size_t size)
-{
-	for (size_t i = 0; i < size; ++i)
-	{
-		array[i] = (double)i;
-	}
-}
 
 TEST_CASE( "Vector<N,T,Tag> Creation & Initialization", "[vector.hpp]" ) 
 {
@@ -40,7 +25,12 @@ TEST_CASE( "Vector<N,T,Tag> Creation & Initialization", "[vector.hpp]" )
 	TVector<4, double, vtag_xyzw> vec4_0{};
 	
 	TVector<4, double, vtag_xyzw> vec4_UND;
-	
+
+	TVector<5, double> vec5_XX{ 1.1,2.2,3.3,4.4,5.5 };
+	TVector<5, double> vec5_XY{};
+	TVector<5, double> vec5_X0;
+
+
 	/*
 	//TVector<5, double> vec5_XXXX  { 1.1,2.2,3.3,4.4,5.5,6.6 }; // COMPILES :( runtime-err :(
 	
@@ -67,6 +57,7 @@ TEST_CASE( "Vector<N,T,Tag> Creation & Initialization", "[vector.hpp]" )
 		std::cout << "Comparing integral types is fine..." << std::endl;
 	*/
     
+	PrintTypeTraits<TVector<5, double> >();
     
     SECTION( "check init correct" ) 
     {
@@ -86,6 +77,11 @@ TEST_CASE( "Vector<N,T,Tag> Creation & Initialization", "[vector.hpp]" )
     
     SECTION( "basic algebra ops" )
     {
+	}
+
+	SECTION( "vector algebra ops" )
+	{
+		vec4_UND = cross(vec4, vec4);
 	}
 }
 
