@@ -383,6 +383,8 @@ namespace talg
 
 		assert(det != 0);
 
+		if (det == 0.0) throw std::exception("invalid operation (devison by 0)");
+
 		return
 		{
 			(m.M12*m.M23*m.M31 - m.M13*m.M22*m.M31 + m.M13*m.M21*m.M32 - m.M11*m.M23*m.M32 - m.M12*m.M21*m.M33 + m.M11*m.M22*m.M33) / det,

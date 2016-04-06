@@ -11,6 +11,8 @@ src/vector.hpp
 src/scalar.hpp
 src/algo.h
 src/algo.cpp
+src/matrix_types.hpp
+src/vector_types.hpp
 )
 
 include_directories(tests)

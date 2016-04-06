@@ -2,7 +2,6 @@
 
 #include <matrix.hpp>
 
-
 TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" ) 
 {
     

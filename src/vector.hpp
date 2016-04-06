@@ -13,35 +13,14 @@
 
 namespace talg
 {
-	/*
-	typedef TVector<4, xyzw, double> Vec4d;
-	typedef TVector<4, xyzw, float> Vec4f;
-
-	typedef TVector<3, xyz, double> Vec3d;
-	typedef TVector<3, xyz, float> Vec3f;
-
-	//http://stackoverflow.com/questions/384502/what-is-the-bit-size-of-long-on-64-bit-windows
-	typedef TVector<3, ijk, long long> Vec3l;
-
-	typedef TVector<2, xy, double> Vec2d;
-	typedef TVector<2, xy, float> Vec2f;
-
-	typedef TVector<3, rgb, double> Color3d;
-	typedef TVector<3, rgb, float> Color3f;
-	//typedef TVector<3, rgb> Color3;
-
-	typedef TVector<4, rgba, double> Color4d;
-	typedef TVector<4, rgba, float> Color4f;
-
-	static const Color3d RED = {1.0, 0.0, 0.0};
-	static const Color3d GREEN = { 0.0, 1.0, 0.0 };
-	static const Color3d BLUE = { 0.0, 0.0, 1.0 };
-	*/
-
+	/* Decoration for templated vectors */
 	class vtag {};
+	class vtag_xy {};
 	class vtag_xyz {};
 	class vtag_xyzw {};
 	class vtag_ijk {};
+	class vtag_rgb {};
+	class vtag_rgba {};
 
 	namespace details
 	{
@@ -329,21 +308,6 @@ namespace talg
 		return lhs;
 	}
 
-	/*
-			template <int D, Tag Tag, typename T>
-			TVector<D, Tag, T> operator * (const TVector<D, Tag, T> &lhs, const TVector<D, Tag, T> &rhs)
-			{
-				throw "Not Implemented";
-				//http://www.answers.com/Q/Will_a_vector_multiplied_by_another_vector_result_in_another_vector
-			}
-
-			template <int D, Tag Tag, typename T>
-			TVector<D, Tag, T> operator / (const TVector<D, Tag, T> &lhs, const TVector<D, Tag, T> &rhs)
-			{
-				throw "Not Implemented";
-				//http://math.stackexchange.com/questions/246594/what-is-vector-division
-			}
-	*/
 
 	template<int N, typename T, typename Tcat>
 	T dot(const TVector<N, T, Tcat> &lhs, const TVector<N, T, Tcat> &rhs)
