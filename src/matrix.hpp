@@ -323,10 +323,13 @@ namespace talg
 		const size_t r0, const size_t r1, const size_t r2,
 		const size_t c0, const size_t c1, const size_t c2)
 	{
-		T ret = (m[r0][c0] * (m[r1][c1] * m[r2][c2] - m[r2][c1] * m[r1][c2]) -
-			m[r0][c1] * (m[r1][c0] * m[r2][c2] - m[r2][c0] * m[r1][c2]) +
-			m[r0][c2] * (m[r1][c0] * m[r2][c1] - m[r2][c0] * m[r1][c1]) );
-		return ret;
+		T ret(
+			m(r0,c0) * ( m(r1,c1) * m(r2,c2) - m(r2,c1) * m(r1,c2) ) -
+			m(r0,c1) * ( m(r1,c0) * m(r2,c2) - m(r2,c0) * m(r1,c2) ) +
+			m(r0,c2) * ( m(r1,c0) * m(r2,c1) - m(r2,c0) * m(r1,c1) ) 
+			);
+
+ 		return ret;
 	}
 
 	/*
@@ -370,10 +373,14 @@ namespace talg
 	template<typename T>
 	T determinant(const TMatrix<4, 4, T>& m)
 	{
-		return m[0][0] * build_minor(m, 1, 2, 3, 1, 2, 3) -
+		T ret( 
+			m[0][0] * build_minor(m, 1, 2, 3, 1, 2, 3) -
 			m[0][1] * build_minor(m, 1, 2, 3, 0, 2, 3) +
 			m[0][2] * build_minor(m, 1, 2, 3, 0, 1, 3) -
-			m[0][3] * build_minor(m, 1, 2, 3, 0, 1, 2);
+			m[0][3] * build_minor(m, 1, 2, 3, 0, 1, 2) 
+			);
+
+		return ret;
 	}
 
 	template<typename T>

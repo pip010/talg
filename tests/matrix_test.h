@@ -30,7 +30,12 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
 		{ 1.1,2.2,3.3,4.4 }
 	}});
 
-
+	TMatrix<4, 4, double> mat22 = {
+		 1.1,2.2,3.3,4.4,
+		 5.1,6.2,7.3,8.4,
+		 9.1,10.2,11.3,12.4,
+		 13.1,14.15,16.3,1.0
+		};
 	
 	
 	TMatrix<2, 3, double> mat222 = {
@@ -81,7 +86,7 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
     SECTION( "basic algebra ops" )
     {
 		auto tmat2 = transpose(mat2);
-		auto det = determinant(mat2);
-		auto imat2 = inverse(mat2);
+		auto det = determinant(mat22);
+		auto imat2 = inverse(mat22);
 	}
 }
