@@ -390,7 +390,7 @@ namespace talg
 
 		assert(det != 0);
 
-		if (det == 0.0) throw std::exception("invalid operation (devison by 0)");
+		if (det == 0.0) throw std::invalid_argument("invalid operation (devison by 0)");
 
 		return
 		{
