@@ -308,6 +308,26 @@ namespace talg
 		return lhs;
 	}
 
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat>& operator/=(TVector<N, T, Tcat> &lhs, const T& rhs)
+	{
+		assert(rhs!=0 && "DIV BY 0")
+
+		for (size_t i = 0; i < N; i++)
+		{
+			lhs[i] = lhs[i] / rhs;
+		}
+
+		return lhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat> operator/(TVector<N, T, Tcat> lhs, const T& rhs)
+	{
+		lhs /= rhs;
+		return lhs;
+	}
+
 
 	template<int N, typename T, typename Tcat>
 	T dot(const TVector<N, T, Tcat> &lhs, const TVector<N, T, Tcat> &rhs)

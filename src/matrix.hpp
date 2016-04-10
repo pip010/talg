@@ -187,8 +187,39 @@ namespace talg
 			assert(index_col < C && "INDEX OUT OF RANGE");
 			return map[index_row][index_col];
 		}
+		T& at(size_t index_row, size_t index_col)
+		{
+			//out of range check DEBUG
+			assert(index_row < R && "INDEX OUT OF RANGE");
+			assert(index_col < C && "INDEX OUT OF RANGE");
 
+			if (index_row >= R)
+				throw std::out_of_range();
 
+			if (index_col >= C)
+				throw std::out_of_range();
+
+			return map[index_row][index_col];
+		}
+		const T& at(size_t index_row, size_t index_col) const
+		{
+			//out of range check DEBUG
+			assert(index_row < R && "INDEX OUT OF RANGE");
+			assert(index_col < C && "INDEX OUT OF RANGE");
+
+			if (index_row >= R)
+				throw std::out_of_range();
+
+			if (index_col >= C)
+				throw std::out_of_range();
+
+			return map[index_row][index_col];
+		}
+
+		constexpr size_t size() const
+		{
+			return R*C;
+		}
 		
 		//query
 		//vector<R> operator()(size_t index_row, query::q_end)
@@ -413,5 +444,26 @@ namespace talg
 		};
 	}
 
+	template<size_t R, size_t C>
+	bool eq(const TMatrix<R, C, float>& lhs, const TMatrix<R, C, float>& rhs, float epsilon = (std::numeric_limits<float>::epsilon()*100) )
+	{
+		for (size_t i = 0; i < lhs.size())
+		{
+			if (abs(lhs[i] - rhs[i]) > epsilon) return false;
+		}
+
+		return true;
+	}
+
+	template<size_t R, size_t C>
+	bool eq(const TMatrix<R, C, double>& lhs, const TMatrix<R, C, double>& rhs, double epsilon = (std::numeric_limits<float>::epsilon()*100) )
+	{
+		for (size_t i = 0; i < lhs.size())
+		{
+			if (abs(lhs[i] - rhs[i]) > epsilon) return false;
+		}
+
+		return true;
+	}
 
 }
