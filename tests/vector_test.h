@@ -42,7 +42,7 @@ TEST_CASE( "Vector<N,T,Tag> Creation & Initialization", "[vector.hpp]" )
 		REQUIRE(xyz_1.y == Approx(2.2));
 		REQUIRE(xyz_1.z == Approx(3.3));
 		CHECK(xyz_U.x == xyz_U.x);
-		CHECK(xyz_U.y == xyz_U.z);
+		CHECK(xyz_U.y == xyz_U.y);
 		CHECK(xyz_U.z == xyz_U.z);
 		
 		TVector<4, double, vtag_xyzw> xyzw_U;
@@ -76,11 +76,12 @@ TEST_CASE( "Vector<N,T,Tag> Creation & Initialization", "[vector.hpp]" )
 		REQUIRE(vec5_1[2] == Approx(3.3));
 		REQUIRE(vec5_1[3] == Approx(4.4));
 		REQUIRE(vec5_1[4] == Approx(5.5));
-		//CHECK(vec5_U[0] == Approx(vec5_U[1]));
-		//CHECK(vec5_U[1] == Approx(vec5_U[2]));
-		//CHECK(vec5_U[2] == Approx(vec5_U[3]));
-		//CHECK(vec5_U[3] == Approx(vec5_U[4]));
-
+		
+		CHECK(vec5_U[0] == vec5_U(0));
+		CHECK(vec5_U[1] == vec5_U(1));
+		CHECK(vec5_U[2] == vec5_U(2));
+		CHECK(vec5_U[3] == vec5_U(3));
+		CHECK(vec5_U[4] == vec5_U(4));
 
 		/*
 		//TVector<5, double> vec5_XXXX  { 1.1,2.2,3.3,4.4,5.5,6.6 }; // COMPILES :( runtime-err :(
