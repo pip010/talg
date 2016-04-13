@@ -225,7 +225,7 @@ namespace talg
 	template<int N, typename T, typename Tcat>
 	bool operator==(const TVector<N, T, Tcat>& lhs, const typename std::enable_if<std::is_integral<T>::value, TVector<N, T, Tcat> >::type& rhs)
 	{
-		for (size_t i = 0; i < N; i++)
+		for (size_t i = 0; i < N; ++i)
 		{
 			if (lhs[i] != rhs[i])
 				return false;
@@ -268,7 +268,7 @@ namespace talg
 	{
 		TVector<N, T, Tcat> ret;
 
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < N; ++i)
 		{
 			ret.data[i] = lhs.data[i] + rhs.data[i];
 		}
@@ -281,7 +281,7 @@ namespace talg
 	{
 		TVector<N, T, Tcat> ret;
 
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < N; ++i)
 		{
 			ret.data[i] = lhs.data[i] - rhs.data[i];
 		}
@@ -293,7 +293,7 @@ namespace talg
 	TVector<N, T, Tcat>& operator*=(TVector<N, T, Tcat> &lhs, const T& rhs)
 	{
 
-		for (size_t i = 0; i < N; i++)
+		for (size_t i = 0; i < N; ++i)
 		{
 			lhs[i] = lhs[i] * rhs;
 		}
@@ -311,9 +311,9 @@ namespace talg
 	template<int N, typename T, typename Tcat>
 	TVector<N, T, Tcat>& operator/=(TVector<N, T, Tcat> &lhs, const T& rhs)
 	{
-		assert(rhs!=0 && "DIV BY 0")
+		assert(rhs!=0 && "DIV BY 0");
 
-		for (size_t i = 0; i < N; i++)
+		for (size_t i = 0; i < N; ++i)
 		{
 			lhs[i] = lhs[i] / rhs;
 		}
@@ -334,7 +334,7 @@ namespace talg
 	{
 		T ret{};
 
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < N; ++i)
 		{
 			ret += (lhs.data[i] * rhs.data[i]);
 		}
@@ -384,5 +384,15 @@ namespace talg
 		vec *= fac;
 	}
 
+	template<int N, typename Tcat>
+	bool eq(const TVector<N, double, Tcat>& lhs, const TVector<N, double, Tcat>& rhs, double epsilon = (std::numeric_limits<double>::epsilon()*100) )
+	{
+		for (size_t i = 0; i < lhs.size(); ++i)
+		{
+			if (abs(lhs[i] - rhs[i]) > epsilon) return false;
+		}
+
+		return true;
+	}
 
 }

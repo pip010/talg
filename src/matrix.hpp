@@ -447,7 +447,7 @@ namespace talg
 	template<size_t R, size_t C>
 	bool eq(const TMatrix<R, C, float>& lhs, const TMatrix<R, C, float>& rhs, float epsilon = (std::numeric_limits<float>::epsilon()*100) )
 	{
-		for (size_t i = 0; i < lhs.size())
+		for (size_t i = 0; i < lhs.size(); ++i)
 		{
 			if (abs(lhs[i] - rhs[i]) > epsilon) return false;
 		}
@@ -458,7 +458,7 @@ namespace talg
 	template<size_t R, size_t C>
 	bool eq(const TMatrix<R, C, double>& lhs, const TMatrix<R, C, double>& rhs, double epsilon = (std::numeric_limits<float>::epsilon()*100) )
 	{
-		for (size_t i = 0; i < lhs.size())
+		for (size_t i = 0; i < lhs.size(); ++i)
 		{
 			if (abs(lhs[i] - rhs[i]) > epsilon) return false;
 		}
