@@ -264,33 +264,79 @@ namespace talg
 	//}
 
 	template<int N, typename T, typename Tcat>
-	TVector<N, T, Tcat> operator + (const TVector<N, T, Tcat> &lhs, const TVector<N, T, Tcat> &rhs)
+	TVector<N, T, Tcat>& operator += (TVector<N, T, Tcat>& lhs, const TVector<N, T, Tcat> &rhs)
 	{
-		TVector<N, T, Tcat> ret;
-
 		for (int i = 0; i < N; ++i)
 		{
-			ret.data[i] = lhs.data[i] + rhs.data[i];
+			lhs[i] = lhs[i] + rhs[i];
 		}
 
-		return ret;
+		return lhs;
 	}
 
 	template<int N, typename T, typename Tcat>
-	TVector<N, T, Tcat> operator - (const TVector<N, T, Tcat> &lhs, const TVector<N, T, Tcat> &rhs)
+	TVector<N, T, Tcat> operator + (TVector<N, T, Tcat> lhs, const TVector<N, T, Tcat> &rhs)
 	{
-		TVector<N, T, Tcat> ret;
-
-		for (int i = 0; i < N; ++i)
-		{
-			ret.data[i] = lhs.data[i] - rhs.data[i];
-		}
-
-		return ret;
+		lhs += rhs;
+		return lhs;
 	}
 
 	template<int N, typename T, typename Tcat>
-	TVector<N, T, Tcat>& operator*=(TVector<N, T, Tcat> &lhs, const T& rhs)
+	TVector<N, T, Tcat>& operator += (TVector<N, T, Tcat>& lhs, const T& rhs)
+	{
+		for (int i = 0; i < N; ++i)
+		{
+			lhs[i] = lhs[i] + rhs;
+		}
+
+		return lhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat> operator + (TVector<N, T, Tcat> lhs, const T& rhs)
+	{
+		lhs += rhs;
+		return lhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat>& operator -= (TVector<N, T, Tcat>& lhs, const TVector<N, T, Tcat> &rhs)
+	{
+		for (int i = 0; i < N; ++i)
+		{
+			lhs[i] = lhs[i] - rhs[i];
+		}
+
+		return lhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat> operator - (TVector<N, T, Tcat> lhs, const TVector<N, T, Tcat> &rhs)
+	{
+		lhs -= rhs;
+		return lhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat>& operator -= (TVector<N, T, Tcat>& lhs, const T& rhs)
+	{
+		for (int i = 0; i < N; ++i)
+		{
+			lhs[i] = lhs[i] - rhs;
+		}
+
+		return lhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat> operator - (TVector<N, T, Tcat> lhs, const T& rhs)
+	{
+		lhs -= rhs;
+		return lhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat>& operator *= (TVector<N, T, Tcat>& lhs, const T& rhs)
 	{
 
 		for (size_t i = 0; i < N; ++i)
@@ -302,14 +348,14 @@ namespace talg
 	}
 
 	template<int N, typename T, typename Tcat>
-	TVector<N, T, Tcat> operator*(TVector<N, T, Tcat> lhs, const T& rhs)
+	TVector<N, T, Tcat> operator * (TVector<N, T, Tcat> lhs, const T& rhs)
 	{
 		lhs *= rhs;
 		return lhs;
 	}
 
 	template<int N, typename T, typename Tcat>
-	TVector<N, T, Tcat>& operator/=(TVector<N, T, Tcat> &lhs, const T& rhs)
+	TVector<N, T, Tcat>& operator /= (TVector<N, T, Tcat>& lhs, const T& rhs)
 	{
 		assert(rhs!=0 && "DIV BY 0");
 
@@ -322,7 +368,7 @@ namespace talg
 	}
 
 	template<int N, typename T, typename Tcat>
-	TVector<N, T, Tcat> operator/(TVector<N, T, Tcat> lhs, const T& rhs)
+	TVector<N, T, Tcat> operator / (TVector<N, T, Tcat> lhs, const T& rhs)
 	{
 		lhs /= rhs;
 		return lhs;
@@ -330,7 +376,7 @@ namespace talg
 
 
 	template<int N, typename T, typename Tcat>
-	T dot(const TVector<N, T, Tcat> &lhs, const TVector<N, T, Tcat> &rhs)
+	T dot(const TVector<N, T, Tcat>& lhs, const TVector<N, T, Tcat>& rhs)
 	{
 		T ret{};
 
@@ -344,7 +390,7 @@ namespace talg
 
 	
 	template<typename T, typename Tcat>
-	TVector<3, T, Tcat> cross(const TVector<3, T, Tcat> &lhs, const TVector<3, T, Tcat> &rhs)
+	TVector<3, T, Tcat> cross(const TVector<3, T, Tcat>& lhs, const TVector<3, T, Tcat>& rhs)
 	{
 		//return{ lhs.y*other.z - z*other.y, z*other.x - x*other.z, x*other.y - y*other.x, 1.0 };
 		return{ 
@@ -358,7 +404,7 @@ namespace talg
 	//http://math.stackexchange.com/questions/720813/do-four-dimensional-vectors-have-a-cross-product-property
 	//http://math.stackexchange.com/questions/185991/is-the-vector-cross-product-only-defined-for-3d
 	template<typename T, typename Tcat>
-	TVector<4, T, Tcat> cross(const TVector<4, T, Tcat> &lhs, const TVector<4, T, Tcat> &rhs)
+	TVector<4, T, Tcat> cross(const TVector<4, T, Tcat>& lhs, const TVector<4, T, Tcat>& rhs)
 	{
 		//return{ lhs.y*other.z - z*other.y, z*other.x - x*other.z, x*other.y - y*other.x, 1.0 };
 		return { 
@@ -370,13 +416,13 @@ namespace talg
 	}
 
 	template<int N, typename T, typename Tcat>
-	T magnitude(const TVector<N, T, Tcat> &vec)
+	T magnitude(const TVector<N, T, Tcat>& vec)
 	{
 		return sqrt(dot(vec, vec));
 	}
 
 	template<int N, typename T, typename Tcat>
-	void normalize(const TVector<N, T, Tcat> &vec)
+	void normalize(const TVector<N, T, Tcat>& vec)
 	{
 		T mag = magnitude(vec);
 		assert(mag != 0.0);
