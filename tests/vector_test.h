@@ -5,7 +5,7 @@
 #include "helpers.h"
 
 
-TEST_CASE("Vector<N,T,Tag> Creation & Initialization", "[vector.hpp]")
+TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 {
 
 	using namespace talg;
