@@ -2,13 +2,10 @@
 
 #include <matrix.hpp>
 
-TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" ) 
+TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
 {
-    
+
     using namespace talg;
-    
-
-
 
 	TMatrix<4, 4, double> mat4_I = {
 		1.0, 0.0, 0.0, 0.0,
@@ -24,20 +21,21 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
 		13.0,14.0,15.0,16.0
 	};
 
+    TMatrix<4, 4, double> mat4_1to16_x2 = {
+        2.0,4.0,6.0,8.0,
+        10.0,12.0,14.0,16.0,
+        18.0,20.0,22.0,24.0,
+        26.0,28.0,30.0,32.0
+    };
 
-
-
-	
-	
 
 	//TODO check for no-compile
 	//auto aaaaaa = mat222 * mat222; // NO COMPILE :)
 
-	
 	//PrintTypeTraits< TMatrix<5,5,double> >();
-	
-	
-    
+
+
+
 	SECTION("Correct init & Check access")
 	{
 		std::array<std::array<double, 4>, 4> xxx = { {
@@ -53,8 +51,8 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
 		mat1.map[2][2] = 1.0;
 		mat1(3, 3) = 1.0;
 	}
-    
-    SECTION( "basic algebra ops" ) 
+
+    SECTION( "basic algebra ops" )
     {
 		TVector<4, double, vtag_xyzw> vec4{ 1.1,2.2,3.3,4.4 };
 
@@ -63,17 +61,70 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
 		auto vec44 = mat4_I * vec4;
 		//std::cout << vec44<< std::endl;
 		REQUIRE(vec4.x == Approx(vec4.x) );
-		
-		
+
+
 		//auto mat44 = mat2 * mat4_I;
 		//std::cout << mat44<< std::endl;
-		
+
 		TMatrix<5, 5, double> mat3{};
 		auto mat55 = mat3 * mat3;
 		//std::cout << mat55<< std::endl;
-		
+
     }
-    
+
+    SECTION( "query ops" )
+    {
+        using namespace talg::query;
+
+        TVector<4, double, vtag_xyzw> vec_row;
+        TVector<4, double, vtag_xyzw> vec_col;
+
+        SECTION( " query0 ")
+        {
+            TVector<4, double, vtag_xyzw> vec_row = mat4_I.query<vtag_xyzw>(0,{});
+            TVector<4, double, vtag_xyzw> vec_col = mat4_I.query<vtag_xyzw>({},0);
+
+            REQUIRE(vec_row.x == Approx(vec_col.x));
+            REQUIRE(vec_row.y == Approx(vec_col.y));
+            REQUIRE(vec_row.z == Approx(vec_col.z));
+            REQUIRE(vec_row.w == Approx(vec_col.w));
+        }
+
+        SECTION( " query1 ")
+        {
+            TVector<4, double, vtag_xyzw> vec_row = mat4_I.query<vtag_xyzw>(1,{});
+            TVector<4, double, vtag_xyzw> vec_col = mat4_I.query<vtag_xyzw>({},1);
+
+            REQUIRE(vec_row.x == Approx(vec_col.x));
+            REQUIRE(vec_row.y == Approx(vec_col.y));
+            REQUIRE(vec_row.z == Approx(vec_col.z));
+            REQUIRE(vec_row.w == Approx(vec_col.w));
+        }
+
+        SECTION( " query2 ")
+        {
+            TVector<4, double, vtag_xyzw> vec_row = mat4_I.query<vtag_xyzw>(2,{});
+            TVector<4, double, vtag_xyzw> vec_col = mat4_I.query<vtag_xyzw>({},2);
+
+            REQUIRE(vec_row.x == Approx(vec_col.x));
+            REQUIRE(vec_row.y == Approx(vec_col.y));
+            REQUIRE(vec_row.z == Approx(vec_col.z));
+            REQUIRE(vec_row.w == Approx(vec_col.w));
+        }
+
+        SECTION( " query3 ")
+        {
+            TVector<4, double, vtag_xyzw> vec_row = mat4_I.query<vtag_xyzw>(3,{});
+            TVector<4, double, vtag_xyzw> vec_col = mat4_I.query<vtag_xyzw>({},3);
+
+            REQUIRE(vec_row.x == Approx(vec_col.x));
+            REQUIRE(vec_row.y == Approx(vec_col.y));
+            REQUIRE(vec_row.z == Approx(vec_col.z));
+            REQUIRE(vec_row.w == Approx(vec_col.w));
+        }
+
+    }
+
     SECTION( "advanced algebra ops" )
     {
 		//UGLYYYYY

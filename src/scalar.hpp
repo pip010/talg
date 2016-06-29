@@ -16,5 +16,5 @@
 namespace talg
 {
 	//this one gonna be exciting
-	//to design TScakar with units in mind
+	//to design TScalar with units in mind
 }

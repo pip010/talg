@@ -1,6 +1,5 @@
 # ignore folders one might use for in-source folder build
 /bin
-/build
 
 # Compiled Object files
 *.slo

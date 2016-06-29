@@ -102,6 +102,11 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 		CHECK(vec5_U[4] == vec5_U(4));
 
 
+		size_t i=0;
+		for(auto& a : xyzw_1234)
+		{
+			CHECK(a == Approx(xyzw_1234(++i)));
+		}
 
 
 		//TVector<5, double> vec5_XXXX  { 1.1,2.2,3.3,4.4,5.5,6.6 }; // COMPILES :( runtime-err :(
@@ -124,12 +129,12 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 
 		SECTION("op (vector + vector)")
 		{
-			auto vec4_2468 = xyzw_1234 + xyzw_1234;			
+			auto vec4_2468 = xyzw_1234 + xyzw_1234;
 			REQUIRE(eq(vec4_2468, xyzw_1234_x2));
 
 			auto vec3_246 = xyz_123 + xyz_123;
 			REQUIRE(eq(vec3_246, xyz_123_x2));
-			
+
 			auto vec3i_246 = ijk_123 + ijk_123;
 			REQUIRE(vec3i_246 == ijk_123_x2);
 			REQUIRE(ijk_0 == ijk_0 + ijk_0);
@@ -176,7 +181,7 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 			ijk_0 -= ijk_0;
 			REQUIRE(ijk_0 == ijk_0);
 		}
-		
+
 		SECTION("op (vector * scalar)")
 		{
 			auto vec4_2468 = xyzw_1234 * 2.0;
@@ -301,5 +306,3 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 		//test_func_print_c(vec5_XXXX.data, vec5_XXXX.size());
 	}
 }
-
-

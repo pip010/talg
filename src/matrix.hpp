@@ -11,43 +11,37 @@
 
 namespace talg
 {
-	// multi-dim indexing
-	//http://nadeausoftware.com/articles/2012/06/c_c_tip_how_loop_through_multi_dimensional_arrays_quickly
-	
-
 	namespace query
 	{
-		
+
 		struct q_end {};
-		
-		struct q_range { 
+
+		struct q_range {
 			size_t begin;
 			size_t end;
 		};
-		
-		
+
+
 		struct vector_view
 		{
 			private:
 			q_range range;
 		};
-		
+
 		struct matrix_view
 		{
 			private:
 			q_range rows_ranage;
 			q_range cols_range;
 		};
-		
+
 	}
 
 	namespace details
-	{   
-		
-				
+	{
 		template<size_t R,size_t C, typename T>
 		struct TMdata
-		{	
+		{
 			union {
 				T data[R*C];
 				T map[R][C];
@@ -56,12 +50,12 @@ namespace talg
 			};
 
 			TMdata() = default;
-			
+
 			TMdata(const std::initializer_list<T>&& il)
 			{
 				//std::copy(il.begin(), il.end(), data.begin());
 				std::copy(il.begin(), il.end(), data);
-				
+
 				/*
 				if (values.size() > size()) {
 				std::ostringstream message;
@@ -73,8 +67,8 @@ namespace talg
 				}
 				*/
 			}
-					
-			
+
+
 			/*
 			//http://christophercrouzet.com/blog/post/2015/01/12/Nested-Initializer-Lists-for-Multidimensional-Arrays
 			//http://www.informit.com/articles/article.aspx?p=1852519
@@ -91,33 +85,33 @@ namespace talg
 				}
 			}
 			*/
-			
+
 		};
-		
+
 		template<typename T>
 		struct TMdata<4,4,T>
-		{	
+		{
 			union{
 				std::array<std::array<T, 4>, 4> adata;
 				//TVector<4, TVector<4, T, vtag>, vtag> amap;
 				T data[4*4];
 				T map[4][4];
-						
+
 				struct {
 					   T M00, M01, M02, M03,
 						 M10, M11, M12, M13,
 						 M20, M21, M22, M23,
-						 M30, M31, M32, M33; 
+						 M30, M31, M32, M33;
 					};
 			};
-			
+
 			TMdata() = default;
-			
-			
+
+
 			TMdata(
-				T m00, T m01, T m02, T m03, 
+				T m00, T m01, T m02, T m03,
 				T m10, T m11, T m12, T m13,
-				T m20, T m21, T m22, T m23, 
+				T m20, T m21, T m22, T m23,
 				T m30, T m31, T m32, T m33):
 				M00(m00), M01(m01), M02(m02), M03(m03),
 				M10(m10), M11(m11), M12(m12), M13(m13),
@@ -125,7 +119,7 @@ namespace talg
 				M30(m30), M31(m31), M32(m32), M33(m33)
 			{
 			}
-			
+
 			TMdata(std::array<std::array<T, 4>, 4>&& m) : adata(m)
 			{
 
@@ -133,30 +127,32 @@ namespace talg
 
 			TMdata(std::array<std::array<T, 4>, 4>& m) : adata(m)
 			{
-				
+
 			}
 
 			//template <typename T, typename... Types>
 			//TMdata(T t, Types... ts) : m_Data{ { t, ts... } } {}
-						
+
 			//TMdata(TVector<4, TVector<4, T, vtag>, vtag>&& m) :
 			//	amap( m )
 			//{}
 		};
-    
+
 	}//details
-	
+
 	template<size_t R,size_t C, typename T>
 	struct TMatrix : public details::TMdata<R,C,T>
 	{
 		TMatrix() = default;
 
-		using details::TMdata<R,C,T>::TMdata;//forward brace initializer
-		
+		// inherit constructor
+		// forward brace initializer
+		using details::TMdata<R,C,T>::TMdata;
+
 		using details::TMdata<R,C,T>::data;
 		using details::TMdata<R,C,T>::map;
-		
-		
+
+
 		T* operator[](size_t index_row)
 		{
 			//out of range check DEBUG
@@ -170,8 +166,8 @@ namespace talg
 			assert(index_row < R && "INDEX OUT OF RANGE");
 			return map[index_row];
 		}
-		
-		
+
+
 		//basic
 		T& operator()(size_t index_row, size_t index_col)
 		{
@@ -187,6 +183,7 @@ namespace talg
 			assert(index_col < C && "INDEX OUT OF RANGE");
 			return map[index_row][index_col];
 		}
+
 		T& at(size_t index_row, size_t index_col)
 		{
 			//out of range check DEBUG
@@ -220,20 +217,46 @@ namespace talg
 		{
 			return R*C;
 		}
-		
+
 		//query
 		//vector<R> operator()(size_t index_row, query::q_end)
 		//vector<C> operator()(query::q_end, size_t index_col)
-		
+
+		template<typename Tcat>
+		TVector<C, T, Tcat> query(size_t index_row, query::q_end empty_col) const
+		{
+			TVector<C, T, Tcat> row_vec;
+
+			  for (size_t c = 0; c < C; ++c)
+			  {
+				  row_vec[c] = map[index_row][c];
+			  }
+
+			return row_vec;
+		}
+
+		template<typename Tcat>
+		TVector<R, T, Tcat> query(query::q_end empty_row, size_t index_col) const
+		{
+			TVector<R, T, Tcat> col_vec;
+
+			  for (size_t r = 0; r < R; ++r)
+			  {
+				  col_vec[r] = map[r][index_col];
+			  }
+
+			return col_vec;
+		}
+
 		//dynamic?
 		//matrix_view<T> operator()(query::q_end, query::q_range)
 		//matrix_view<T> operator()(query::q_range, query::q_end)
 		//matrix_view<T> operator()(query::q_range, query::q_range)
 		//matrix_view<T> operator()(query::q_end, query::q_end) //worth doing symmetry?
 	};
-	
-    
-    //TODO operator >>    
+
+
+    //TODO operator >>
     template<size_t R,size_t C, typename T>
 	std::ostream& operator << (std::ostream &o, const TMatrix<R,C,T>& m)
 	{
@@ -246,14 +269,14 @@ namespace talg
 
 		return o;
 	}
-	
+
 
 	//TODO gcc has no ambiguty but for VS I have to explictly disabel the case for matrix 4x4 and other overloads
 	template<size_t R,size_t C, typename T>
 	TMatrix<R,C,T> operator*(const TMatrix<R,C,T>& lhs, const typename std::enable_if<R==C && R != 4, TMatrix<R,C,T> >::type& rhs)
 	{
 		TMatrix<R,C,T> z;
-		
+
 		  for (size_t r = 0; r < R; r++) {
 			  for (size_t c = 0; c < C; c++) {
 					z(r,c) = 0;
@@ -261,10 +284,15 @@ namespace talg
 						  z(r,c) += lhs(r,i) * rhs(i,c);
                   }
           }
-          
+
+		  //	// multi-dim indexing
+		  	//http://nadeausoftware.com/articles/2012/06/c_c_tip_how_loop_through_multi_dimensional_arrays_quickly
+
+
+
           //TODO in order to support larger static/dynamic matrices
           //http://functionspace.com/articles/40/Cache-aware-Matrix-Multiplication---Naive-isn--039;t-that-bad-
-          
+
           /*
           n = 4096;
 			for(i=0;i<n;i++)
@@ -276,16 +304,17 @@ namespace talg
 				 }
 			}
           */
-          
+
           return z;
 	}
-	
-	
+
+
 	template<typename T>
 	TMatrix<4,4,T> operator*(const TMatrix<4,4,T>& lhs, const TMatrix<4,4,T>& rhs)
 	{
-		
+
 		//TODO VS2015 completely got confused and tried to return TVector<16, T, Tcat> !!!!???
+
 		/*
 		return 	{{{
 				lhs.M00*rhs.M00 + lhs.M01*rhs.M10 + lhs.M02*rhs.M20 + lhs.M03*rhs.M30,
@@ -336,7 +365,7 @@ namespace talg
 
 	}
 
-	
+
 	template<typename T, typename Tcat>
 	TVector<4, T, Tcat> operator*(const TMatrix<4,4,T>& m, const TVector<4, T, Tcat>& vec)
 	{
@@ -348,6 +377,17 @@ namespace talg
 		};
 	}
 
+
+//===============================
+
+	// template<typename T, typename Tcat>
+	// TVector<4, T, Tcat> TMatrix<4,4,T>::q(size_t index_row, query::q_end empty_col) const
+	// {
+	// 	return { map[index_row][0], map[index_row][1], map[index_row][2], map[index_row][3] };
+	// }
+
+//===============================
+
 	//Builds Matrix minor via inclusive explicit defenition of row-columns
 	template<typename T>
 	T build_minor(const TMatrix<4, 4, T>& m,
@@ -357,7 +397,7 @@ namespace talg
 		T ret(
 			m(r0,c0) * ( m(r1,c1) * m(r2,c2) - m(r2,c1) * m(r1,c2) ) -
 			m(r0,c1) * ( m(r1,c0) * m(r2,c2) - m(r2,c0) * m(r1,c2) ) +
-			m(r0,c2) * ( m(r1,c0) * m(r2,c1) - m(r2,c0) * m(r1,c1) ) 
+			m(r0,c2) * ( m(r1,c0) * m(r2,c1) - m(r2,c0) * m(r1,c1) )
 			);
 
  		return ret;
@@ -404,11 +444,11 @@ namespace talg
 	template<typename T>
 	T determinant(const TMatrix<4, 4, T>& m)
 	{
-		T ret( 
+		T ret(
 			m[0][0] * build_minor(m, 1, 2, 3, 1, 2, 3) -
 			m[0][1] * build_minor(m, 1, 2, 3, 0, 2, 3) +
 			m[0][2] * build_minor(m, 1, 2, 3, 0, 1, 3) -
-			m[0][3] * build_minor(m, 1, 2, 3, 0, 1, 2) 
+			m[0][3] * build_minor(m, 1, 2, 3, 0, 1, 2)
 			);
 
 		return ret;
