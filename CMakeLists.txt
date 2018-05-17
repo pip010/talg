@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
- 
+
 project(talg)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -9,8 +9,8 @@ SET(SrcFolderListing
 src/matrix.hpp
 src/vector.hpp
 src/scalar.hpp
-src/algo.h
-src/algo.cpp
+src/quaternion.hpp
+src/algos.hpp
 src/matrix_types.hpp
 src/vector_types.hpp
 )
@@ -19,11 +19,13 @@ include_directories(tests)
 SET(TestsFolderListing
 tests/vector_test.h
 tests/matrix_test.h
+tests/scalar_test.h
+tests/quaternion_test.h
 )
- 
+
 add_executable(talg tests/main.cpp ${SrcFolderListing} ${TestsFolderListing})
 
-set_property(TARGET talg PROPERTY CXX_STANDARD 11)
+set_property(TARGET talg PROPERTY CXX_STANDARD 14)
 set_property(TARGET talg PROPERTY CXX_STANDARD_REQUIRED ON)
 
 
