@@ -143,12 +143,29 @@ namespace talg
 	template<size_t R,size_t C, typename T>
 	struct TMatrix : public details::TMdata<R,C,T>
 	{
+		typedef T value_type;
+		typedef size_t size_type;
+		typedef ptrdiff_t difference_type;
+
+		typedef T* pointer;
+		using ptr = pointer;
+
+		typedef const T* const_pointer;
+		using cptr = const_pointer;
+
+		typedef T& reference;
+		using ref = reference;
+
+		typedef const T& const_reference;
+		using cref = const_reference;
+
+
 		TMatrix() = default;
 
 		// inherit constructor
-		// forward brace initializer
 		using details::TMdata<R,C,T>::TMdata;
 
+		// forward brace initializer
 		using details::TMdata<R,C,T>::data;
 		using details::TMdata<R,C,T>::map;
 
@@ -253,22 +270,31 @@ namespace talg
 		//matrix_view<T> operator()(query::q_range, query::q_end)
 		//matrix_view<T> operator()(query::q_range, query::q_range)
 		//matrix_view<T> operator()(query::q_end, query::q_end) //worth doing symmetry?
+
+		cptr begin() const
+		{
+			return data;
+		}
+
+		cptr end() const
+		{
+			return data+(R*C);
+		}
+
+		ptr begin()
+		{
+			return data;
+		}
+
+		ptr end()
+		{
+			return data+(R*C);
+		}
+
 	};
 
 
-    //TODO operator >>
-    template<size_t R,size_t C, typename T>
-	std::ostream& operator << (std::ostream &o, const TMatrix<R,C,T>& m)
-	{
-		o << "mat(|";
 
-		for (auto a : m.data)
-			o << a << "|";
-
-		o << ")";
-
-		return o;
-	}
 
 
 	//TODO gcc has no ambiguty but for VS I have to explictly disabel the case for matrix 4x4 and other overloads
@@ -461,7 +487,7 @@ namespace talg
 
 		assert(det != 0);
 
-		if (det == 0.0) throw std::invalid_argument("invalid operation (devison by 0)");
+		if (det == 0.0) throw std::invalid_argument("invalid operation (divison by 0)");
 
 		return
 		{
@@ -506,4 +532,22 @@ namespace talg
 		return true;
 	}
 
-}
+	template<size_t R,size_t C, typename T>
+	std::ostream& operator<< (std::ostream &os, const TMatrix<R,C,T>& m)
+	{
+		for (auto a : m.data)
+			os << a << " ";
+
+		return os;
+	}
+
+	template<size_t R,size_t C, typename T>
+	std::ostream& operator>> (std::istream &is, const TMatrix<R,C,T>& m)
+	{
+		for (auto a : m.data)
+			is >> a;
+
+		return is;
+	}
+
+}//end namespace
