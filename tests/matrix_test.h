@@ -153,5 +153,24 @@ TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
 		auto tmat2 = transpose(mat2);
 		auto det = determinant(mat22);
 		auto imat2 = inverse(mat22);
+
+    auto mat2_trace = trace(mat2);
+    REQUIRE(mat2_trace == Approx(1.1+2.2+3.3+4.4));
 	}
-}
+
+  SECTION( " Matrix Transform " )
+  {
+    using T = MatrixTransform<double>;
+
+    T t;
+
+    REQUIRE(t[3][3] == Approx(1.0));
+
+    auto translation_part = t.Trans3x1();
+    auto scale_part_vec = t.Scale3x1();
+    auto scale_part_matrix = t.Scale3x3();
+    auto rotate_part = t.Rotate3x3();
+
+  }
+
+}//end TEST CASE

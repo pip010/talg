@@ -7,6 +7,8 @@
 #include <cassert>
 #include <cmath>
 
+#include <limits>
+
 #include <vector.hpp>
 
 namespace talg
@@ -169,6 +171,20 @@ namespace talg
 		using details::TMdata<R,C,T>::data;
 		using details::TMdata<R,C,T>::map;
 
+		static constexpr TMatrix<4,4,T> ZERO {
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0
+		};
+
+		static constexpr TMatrix<4,4,T> IDENTITY {
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		};
+
 
 		T* operator[](size_t index_row)
 		{
@@ -235,10 +251,6 @@ namespace talg
 			return R*C;
 		}
 
-		//query
-		//vector<R> operator()(size_t index_row, query::q_end)
-		//vector<C> operator()(query::q_end, size_t index_col)
-
 		template<typename Tcat>
 		TVector<C, T, Tcat> query(size_t index_row, query::q_end empty_col) const
 		{
@@ -293,7 +305,99 @@ namespace talg
 
 	};
 
+	template<typename T>
+	struct MatrixTransform : public TMatrix<4,4,T>
+	{
+		using TMat4 = TMatrix<4,4,T>;
+		using TMat3 = TMatrix<3,3,T>;
+		using TVec4 = TVector<4,T,vtag_xyzw>;
+		using TVec3 = TVector<3,T,vtag_xyz>;
 
+		using TMat4::map;
+		using TMat4::data;
+
+		MatrixTransform()
+		//: TMat4(TMat4::IDENTITY)
+		: TMat4{
+			1,0,0,0,
+			0,1,0,0,
+			0,0,1,0,
+			0,0,0,1
+			}
+		{
+		}
+
+		TVec3 Trans3x1() const
+		{
+			return { map[0][3], map[1][3], map[2][3] };
+		}
+
+		TVec3 Scale3x1() const
+		{
+			return {
+				magnitude(TVec3{map[0][0], map[1][0], map[2][0]}),
+				magnitude(TVec3{map[0][0], map[1][0], map[2][0]}),
+				magnitude(TVec3{map[0][0], map[1][0], map[2][0]})
+			};
+		}
+
+		TMat3 Scale3x3() const
+		{
+			return {
+				magnitude(TVec3{map[0][0], map[1][0], map[2][0]}), 0.0, 0.0,
+				0.0, magnitude(TVec3{map[0][0], map[1][0], map[2][0]}), 0.0,
+				0.0, 0.0, magnitude(TVec3{map[0][0], map[1][0], map[2][0]})
+			};
+		}
+
+		TMat3 Rotate3x3() const
+		{
+			//TODO numerical safe DIV by 0
+			//TODO turn divisions into multi
+
+			//auto s = Scale3x1() + std::numeric_limits<T>::min();
+			auto s = Scale3x1();
+
+			return {
+				map[0][0] / s.x , map[0][1] / s.y, map[0][2] / s.z ,
+				map[1][0] / s.x , map[1][1] / s.y, map[1][2] / s.z ,
+				map[2][0] / s.x , map[2][1] / s.y, map[2][2] / s.z
+			};
+		}
+
+		// TMatrix<3,3> Scale3x3() const
+		// {
+		// 	return {
+		// 		magnitude({map[0][0], map[1][0], map[2][]}),
+		// 	};
+		// }
+
+		TMat4 RotationMatrixArounAxisX(double angle)
+		{
+			return {
+				1, 0, 0, 0,
+				0, cos(angle), -sin(angle), 0,
+				0, sin(angle), cos(angle), 0,
+				0, 0, 0, 1 };
+		}
+		TMat4 RotationMatrixAroundAxisY(double angle)
+		{
+			return {
+				cos(angle), 0, sin(angle), 0,
+				0, 1, 0, 0,
+				-sin(angle), 0, cos(angle), 0,
+				0, 0, 0, 1 };
+		}
+		TMat4 RotationMatrixAroundAxisZ(double angle)
+		{
+			return {
+				cos(angle), -sin(angle), 0, 0,
+				sin(angle), cos(angle), 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1 };
+		}
+
+	};
 
 
 
@@ -310,26 +414,6 @@ namespace talg
 						  z(r,c) += lhs(r,i) * rhs(i,c);
                   }
           }
-
-		  //	// multi-dim indexing
-		  	//http://nadeausoftware.com/articles/2012/06/c_c_tip_how_loop_through_multi_dimensional_arrays_quickly
-
-
-
-          //TODO in order to support larger static/dynamic matrices
-          //http://functionspace.com/articles/40/Cache-aware-Matrix-Multiplication---Naive-isn--039;t-that-bad-
-
-          /*
-          n = 4096;
-			for(i=0;i<n;i++)
-			{
-				for(k=0;k<n;k++)
-				{
-					for(j=0;j<n;j++)
-						C[i][j]+=A[i][k]*B[k][j];
-				 }
-			}
-          */
 
           return z;
 	}
@@ -441,6 +525,17 @@ namespace talg
 
 	}
 	*/
+
+	template<size_t R, size_t C, typename T>
+	typename std::enable_if<R == C, T >::type trace( const TMatrix<R, C, T>& m)
+	{
+			T v = 0;
+			for(int i = 0; i < R; ++i)
+			{
+				v += m[i][i];
+			}
+			return v;
+	}
 
 	//TODO adjoin / conjugate transpose
 	template<typename T>

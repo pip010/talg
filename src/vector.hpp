@@ -137,7 +137,6 @@ namespace talg
 
 		//forward brace initializer
 		using details::TVdata<N, T, Tcat>::TVdata;
-
 		using details::TVdata<N, T, Tcat>::data;
 
 		//TODO most likely drop it, no colapse to pointer, use inner data member
@@ -204,21 +203,6 @@ namespace talg
 			return N;
 		}
 
-		/*
-		inline bool operator< (const TVector& lhs, const TVector& rhs)
-		{
-			for (size_t i = 0; i < N; i++)
-			{
-				if (lhs[i] > rhs[i])
-					return false;
-			}
-
-			return true;
-		}
-		inline bool operator> (const TVector& lhs, const TVector& rhs) { return rhs < lhs; }
-		inline bool operator<=(const TVector& lhs, const TVector& rhs) { return !(lhs > rhs); }
-		inline bool operator>=(const TVector& lhs, const TVector& rhs) { return !(lhs < rhs); }
-		*/
 
 		cptr begin() const
 		{
@@ -249,11 +233,10 @@ namespace talg
 	//SFINAE
 	//http://eli.thegreenplace.net/2014/sfinae-and-enable_if/
 	//http://en.cppreference.com/w/cpp/types/enable_if
-	//forbiden for reals
+	//forbiden for real numbers
 	//inline bool operator==(const X& lhs, const X& rhs){ /* do actual comparison */ }
 	//inline bool operator!=(const X& lhs, const X& rhs){ return !(lhs == rhs); }
 
-	// WOW it worked gcc error : note:   template argument deduction/substitution failed:
 	template<int N, typename T, typename Tcat>
 	bool operator==(const TVector<N, T, Tcat>& lhs, const typename std::enable_if<std::is_integral<T>::value, TVector<N, T, Tcat> >::type& rhs)
 	{
@@ -271,6 +254,22 @@ namespace talg
 	{
 		return !(lhs == rhs);
 	}
+
+	/*
+	inline bool operator< (const TVector& lhs, const TVector& rhs)
+	{
+		for (size_t i = 0; i < N; i++)
+		{
+			if (lhs[i] > rhs[i])
+				return false;
+		}
+
+		return true;
+	}
+	inline bool operator> (const TVector& lhs, const TVector& rhs) { return rhs < lhs; }
+	inline bool operator<=(const TVector& lhs, const TVector& rhs) { return !(lhs > rhs); }
+	inline bool operator>=(const TVector& lhs, const TVector& rhs) { return !(lhs < rhs); }
+	*/
 
 
 
@@ -433,12 +432,22 @@ namespace talg
 	}
 
 	template<int N, typename T, typename Tcat>
-	void normalize(const TVector<N, T, Tcat>& vec)
+	T norm = magnitude;
+
+	template<int N, typename T, typename Tcat>
+	void normalize(TVector<N, T, Tcat>& vec)
 	{
 		T mag = magnitude(vec);
 		assert(mag != 0.0);
 		T fac = 1.0 / mag;
 		vec *= fac;
+	}
+
+	template<int N, typename T, typename Tcat>
+	TVector<N, T, Tcat> normal(TVector<N, T, Tcat> vec)
+	{
+		normalize(vec);
+		return vec;
 	}
 
 	template<int N, typename Tcat>

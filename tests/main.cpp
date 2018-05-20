@@ -4,3 +4,5 @@
 
 #include "vector_test.h"
 #include "matrix_test.h"
+#include "scalar_test.h"
+#include "quaternion_test.h"

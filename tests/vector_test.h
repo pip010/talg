@@ -117,6 +117,8 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 
 		//PrintTypeTraits<TVector<5, double> >();
 
+    REQUIRE( xyzw_1234.size() == 4 );
+
 	}
 
 	SECTION("Basic algebra ops:")
@@ -298,7 +300,15 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 	SECTION("advanced algebra ops")
 	{
 		auto mag = magnitude(xyzw_1234);
+		REQUIRE(mag == Approx( 5.4772));
+
 		auto cvec = cross(xyzw_1234, xyzw_1234);
+
+		auto n = normal(xyzw_1234);
+		REQUIRE(magnitude(n) == Approx(1.0));
+
+		normalize(n);
+		REQUIRE(magnitude(n) == Approx(1.0));
 	}
 
 	SECTION("legacy C API")
