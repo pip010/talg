@@ -1,9 +1,10 @@
+#include "catch/catch.hpp"
+
 #include <quaternion.hpp>
 
-#include "helpers.h"
 
 
-TEST_CASE("Testing TQuaternion<N> ", "[quaternion.hpp]")
+TEST_CASE("Testing TQuaternion<N>", "[quaternion.hpp]")
 {
   using namespace talg;
 
@@ -42,7 +43,7 @@ TEST_CASE("Testing TQuaternion<N> ", "[quaternion.hpp]")
 
   }
 
-  SECTION("Basic algebra ops:")
+  SECTION("Basic algebra ops")
   {
     auto quat_2468  = quat_1234 + quat_1234;
     auto quat2_1234 = quat_2468 - quat_1234;
@@ -55,4 +56,5 @@ TEST_CASE("Testing TQuaternion<N> ", "[quaternion.hpp]")
     auto dscl = dot(quat_1234,quat_1234);
     auto cvec = cross(quat_1234, quat_1234);
   }
-}
+
+}//end TEST CASE

@@ -11,6 +11,8 @@
 
 #include <cmath>
 
+#include <limits>
+
 namespace talg
 {
 	/* Decoration for templated vectors */
@@ -57,8 +59,6 @@ namespace talg
 
 			//template <class U, class... Ts>
 			//X(U n, Ts... rest) : X(rest...) { ..the recursive work .. }
-
-
 
 		};
 
@@ -119,7 +119,7 @@ namespace talg
 
 		typedef T value_type;
 		typedef size_t size_type;
-		typedef ptrdiff_t difference_type;
+		//typedef ptrdiff_t difference_type;
 
 		typedef T* pointer;
 		using ptr = pointer;
@@ -255,6 +255,7 @@ namespace talg
 		return !(lhs == rhs);
 	}
 
+	//TODO does this makes sense? (component wise comparison)
 	/*
 	inline bool operator< (const TVector& lhs, const TVector& rhs)
 	{
@@ -270,6 +271,21 @@ namespace talg
 	inline bool operator<=(const TVector& lhs, const TVector& rhs) { return !(lhs > rhs); }
 	inline bool operator>=(const TVector& lhs, const TVector& rhs) { return !(lhs < rhs); }
 	*/
+
+	template<int N, typename T, typename Tcat>
+	inline bool operator< (const TVector<N, T, Tcat>& lhs, const T& rhs)
+	{
+		return magnitude(lhs) < rhs;
+	}
+
+	template<int N, typename T, typename Tcat>
+	bool operator> (const TVector<N, T, Tcat>& lhs, const T& rhs) { return rhs < lhs; }
+
+	template<int N, typename T, typename Tcat>
+	bool operator<=(const TVector<N, T, Tcat>& lhs, const T& rhs) { return !(lhs > rhs); }
+
+	template<int N, typename T, typename Tcat>
+	bool operator>=(const TVector<N, T, Tcat>& lhs, const T& rhs) { return !(lhs < rhs); }
 
 
 

@@ -1,8 +1,11 @@
-#pragma once
+
+#include "catch/catch.hpp"
 
 #include <matrix.hpp>
 
-TEST_CASE( "TMatrix<R,C,T> Creation & Initialization", "[matrix.hpp]" )
+#include <transform.hpp>
+
+TEST_CASE( "Testing TMatrix<R,C,T>", "[matrix.hpp]" )
 {
 
     using namespace talg;

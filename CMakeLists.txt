@@ -17,13 +17,14 @@ src/vector_types.hpp
 
 include_directories(tests)
 SET(TestsFolderListing
-tests/vector_test.h
-tests/matrix_test.h
-tests/scalar_test.h
-tests/quaternion_test.h
+tests/vector_test.cpp
+tests/matrix_test.cpp
+tests/scalar_test.cpp
+tests/quaternion_test.cpp
+tests/main.cpp
 )
 
-add_executable(talg tests/main.cpp ${SrcFolderListing} ${TestsFolderListing})
+add_executable(talg ${SrcFolderListing} ${TestsFolderListing})
 
 set_property(TARGET talg PROPERTY CXX_STANDARD 14)
 set_property(TARGET talg PROPERTY CXX_STANDARD_REQUIRED ON)

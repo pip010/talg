@@ -1,4 +1,5 @@
-#pragma once
+
+#include "catch/catch.hpp"
 
 #include <vector.hpp>
 

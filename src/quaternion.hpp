@@ -8,7 +8,6 @@ namespace talg
   struct TQuaternion : public TVector<4,T,vtag_xyzw>
   {
 
-    //inherit cnstr
     using TVector<4,T,vtag_xyzw>::TVector;
 
     //forward brace initializer
@@ -18,7 +17,6 @@ namespace talg
     using TVector<4,T,vtag_xyzw>::z;
     using TVector<4,T,vtag_xyzw>::w;
 
-    //TODO from HomoMatrix
     void FromRotationMatrix(TMatrix<3,3,T> rotm)
     {
       // Adapted from Ogre3D OgreQuaternion.h/cpp
