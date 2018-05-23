@@ -32,9 +32,17 @@ namespace talg
 
 
 
-  TScalar<double> operator""_mm(long double v){
-    return {v};
+  TScalar<double> operator""_mm(long double v)
+  {
+    return { static_cast<double>(v) };
   }
+
+  TScalar<double> operator""_mm(unsigned long long int v)
+  {
+    return { static_cast<double>(v) };
+  }
+
+
 
   // template<typename T>
   // TScalar<T> operator""_mm ()
