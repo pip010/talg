@@ -15,7 +15,7 @@ https://www.codeproject.com/Articles/988932/Boost-Units-Library
 Current implementation derived from:
 https://benjaminjurke.com/content/articles/2015/compile-time-numerical-unit-dimension-checking/
 
-Alternative modern c++ approach:
+Alternative yet modern c++ approach:
 https://github.com/nholthaus/units/blob/master/include/units.h
 
 = TODO in order to support larger static/dynamic matrices
