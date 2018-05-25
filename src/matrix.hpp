@@ -171,19 +171,20 @@ namespace talg
 		using details::TMdata<R,C,T>::data;
 		using details::TMdata<R,C,T>::map;
 
-		static constexpr TMatrix<4,4,T> ZERO {
-			0, 0, 0, 0,
-			0, 0, 0, 0,
-			0, 0, 0, 0,
-			0, 0, 0, 0
-		};
 
-		static constexpr TMatrix<4,4,T> IDENTITY {
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1
-		};
+		//static constexpr TMatrix<4,4,T> ZERO {
+		//	0, 0, 0, 0,
+		//	0, 0, 0, 0,
+		//	0, 0, 0, 0,
+		//	0, 0, 0, 0
+		//};
+
+		//static constexpr TMatrix<4,4,T> IDENTITY {
+		//	1, 0, 0, 0,
+		//	0, 1, 0, 0,
+		//	0, 0, 1, 0,
+		//	0, 0, 0, 1
+		//};
 
 
 		T* operator[](size_t index_row)
