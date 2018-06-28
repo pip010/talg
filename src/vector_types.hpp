@@ -18,10 +18,12 @@ namespace talg
 	typedef TVector<4, double, vtag_rgba> Color4d;
 	typedef TVector<4, float, vtag_rgba> Color4f;
 
+	static const Color3d BLACK = { 0.0, 0.0, 0.0 };
 	static const Color3d RED = { 1.0, 0.0, 0.0 };
 	static const Color3d GREEN = { 0.0, 1.0, 0.0 };
 	static const Color3d BLUE = { 0.0, 0.0, 1.0 };
-	static const Color3d REDA = { 1.0, 0.0, 0.0, 0.0 };
-	static const Color3d GREENA = { 0.0, 1.0, 0.0, 0.0 };
-	static const Color3d BLUEA = { 0.0, 0.0, 1.0, 0.0 };
+	static const Color3d YELLOW = { 1.0, 1.0, 0.0 };
+	static const Color3d GRAY = { 0.3, 0.3, 0.3 };
+	static const Color3d LIGHTGRAY = { 0.8, 0.8, 0.8 };
+	static const Color3d WHITE = { 1.0, 1.0, 1.0 };
 }

@@ -20,9 +20,11 @@ namespace talg
 	class vtag_xy {};
 	class vtag_xyz {};
 	class vtag_xyzw {};
+	class vtag_ij {};
 	class vtag_ijk {};
 	class vtag_rgb {};
 	class vtag_rgba {};
+	class vtag_adsp {};
 
 	namespace details
 	{
@@ -63,6 +65,22 @@ namespace talg
 		};
 
 		template<typename T>
+		struct TVdata<2, T, vtag_ij>
+		{
+			union {
+				struct { T i; T j; };
+				//std::array<T, 3> data;
+				T data[2];
+			};
+
+			TVdata() = default;
+
+			TVdata(T t1, T t2) :
+				i(t1), j(t2)
+			{}
+		};
+
+		template<typename T>
 		struct TVdata<3, T, vtag_ijk>
 		{
 			union {
@@ -75,6 +93,22 @@ namespace talg
 
 			TVdata(T t1, T t2, T t3) :
 				i(t1), j(t2), k(t3)
+			{}
+		};
+
+		template<typename T>
+		struct TVdata<2, T, vtag_xy>
+		{
+			union {
+				struct { T x; T y; };
+				//std::array<T, 3> data;
+				T data[2];
+			};
+
+			TVdata() = default;
+
+			TVdata(T t1, T t2) :
+				x(t1), y(t2)
 			{}
 		};
 
@@ -111,12 +145,62 @@ namespace talg
 			}
 		};
 
+		template<typename T>
+		struct TVdata<3, T, vtag_rgb>
+		{
+			union {
+				struct { T r; T g; T b; };
+				//std::array<T, 3> data;
+				T data[3];
+			};
+
+			TVdata() = default;
+
+			TVdata(T t1, T t2, T t3) :
+				r(t1), g(t2), b(t3)
+			{}
+		};
+
+		template<typename T>
+		struct TVdata<4, T, vtag_rgba>
+		{
+			union {
+				struct { T r; T g; T b; T a; };
+				//std::array<T, 4> data;
+				T data[4];
+			};
+
+			TVdata() = default;
+
+			TVdata(T t1, T t2, T t3, T t4) :
+				r(t1), g(t2), b(t3), a(t4)
+			{
+			}
+		};
+
+		template<typename T>
+		struct TVdata<4, T, vtag_adsp>
+		{
+			union {
+				struct { T a; T d; T s; T p; };
+				//std::array<T, 4> data;
+				T data[4];
+			};
+
+			TVdata() = default;
+
+			TVdata(T t1, T t2, T t3, T t4) :
+				a(t1), d(t2), s(t3), p(t4)
+			{
+			}
+		};
+
 	}
 
 	template<int N, typename T, typename Tcat = vtag>
 	struct TVector : public details::TVdata<N, T, Tcat>
 	{
-
+		typedef Tcat tag_type;
 		typedef T value_type;
 		typedef size_t size_type;
 		//typedef ptrdiff_t difference_type;
@@ -138,6 +222,8 @@ namespace talg
 		//forward brace initializer
 		using details::TVdata<N, T, Tcat>::TVdata;
 		using details::TVdata<N, T, Tcat>::data;
+
+
 
 		//TODO most likely drop it, no colapse to pointer, use inner data member
 		//http://en.cppreference.com/w/cpp/language/cast_operator
@@ -448,7 +534,15 @@ namespace talg
 	}
 
 	template<int N, typename T, typename Tcat>
-	T norm = magnitude;
+	T norm(const TVector<N, T, Tcat>& vec)
+	{
+		return magnitude(vec);
+	}
+
+
+	// implicit type deduction fails with alias !?
+	//template<int N, typename T, typename Tcat>
+	//T norm = magnitude;
 
 	template<int N, typename T, typename Tcat>
 	void normalize(TVector<N, T, Tcat>& vec)

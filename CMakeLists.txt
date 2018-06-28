@@ -1,37 +1,69 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.7)
 
-project(talg)
+project(talg VERSION 0.1 LANGUAGES CXX)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_library(talg INTERFACE)
 
-include_directories(src)
-SET(SrcFolderListing
-src/matrix.hpp
-src/vector.hpp
-src/scalar.hpp
-src/quaternion.hpp
-src/algos.hpp
-src/matrix_types.hpp
-src/vector_types.hpp
+#target_sources(talg
+#    INTERFACE
+#        "${CMAKE_CURRENT_LIST_DIR}/src/vector.hpp"
+#        "${CMAKE_CURRENT_LIST_DIR}/src/matrix.hpp"
+#        "${CMAKE_CURRENT_LIST_DIR}/src/quaternion.hpp"
+#        "${CMAKE_CURRENT_LIST_DIR}/src/scalar.hpp"
+#		"${CMAKE_CURRENT_LIST_DIR}/src/transform.hpp"
+#)
+
+#target_include_directories(talg INTERFACE src/)#../include
+target_include_directories(talg INTERFACE	
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
+    $<INSTALL_INTERFACE:...># can be relative to install path
 )
 
-include_directories(tests)
-SET(TestsFolderListing
-tests/vector_test.cpp
-tests/matrix_test.cpp
-tests/scalar_test.cpp
-tests/quaternion_test.cpp
-tests/main.cpp
+set(CMAKE_CXX_STANDARD 14)
+
+#set(INCLUDE_INSTALL_DIR "")
+
+set(CMAKECONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/talg")
+
+#set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
+
+#message(STATUS "yyyy:${PROJECT_BINARY_DIR}")
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${PROJECT_BINARY_DIR}/TalgConfigVersion.cmake"
+    VERSION 0.1
+    COMPATIBILITY AnyNewerVersion
 )
 
-add_executable(talg ${SrcFolderListing} ${TestsFolderListing})
+install(TARGETS talg
+    EXPORT TalgTargets
+    LIBRARY DESTINATION lib COMPONENT Runtime
+    ARCHIVE DESTINATION lib COMPONENT Development
+    RUNTIME DESTINATION bin COMPONENT Runtime
+    PUBLIC_HEADER DESTINATION include COMPONENT Development
+    BUNDLE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Runtime
+)
 
-set_property(TARGET talg PROPERTY CXX_STANDARD 14)
-set_property(TARGET talg PROPERTY CXX_STANDARD_REQUIRED ON)
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    "${PROJECT_SOURCE_DIR}/cmake/TalgConfig.cmake.in"
+    "${PROJECT_BINARY_DIR}/TalgConfig.cmake"
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+	#PATH_VARS INCLUDE_INSTALL_DIR
+)
+
+install(EXPORT TalgTargets FILE TalgTargets.cmake NAMESPACE talg:: 
+		DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+ 
+install(FILES "${PROJECT_BINARY_DIR}/TalgConfigVersion.cmake"
+              "${PROJECT_BINARY_DIR}/TalgConfig.cmake"
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+		
+#install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/ DESTINATION include)
 
 
+ADD_SUBDIRECTORY(tests)
 
-# Includes Catch in the project:
-#add_subdirectory(${EXT_PROJECTS_DIR}/catch)
-#include_directories(${CATCH_INCLUDE_DIR} ${COMMON_INCLUDES})
-#enable_testing(true)
+#message(STATUS "xxx:${CMAKECONFIG_INSTALL_DIR}")
