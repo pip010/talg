@@ -23,6 +23,7 @@ namespace talg
 	static const Color3d GREEN = { 0.0, 1.0, 0.0 };
 	static const Color3d BLUE = { 0.0, 0.0, 1.0 };
 	static const Color3d YELLOW = { 1.0, 1.0, 0.0 };
+	static const Color3d PURPLE = { 1.0, 0.0, 1.0 };
 	static const Color3d GRAY = { 0.3, 0.3, 0.3 };
 	static const Color3d LIGHTGRAY = { 0.8, 0.8, 0.8 };
 	static const Color3d WHITE = { 1.0, 1.0, 1.0 };

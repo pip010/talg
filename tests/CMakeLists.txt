@@ -1,32 +1,31 @@
 project(talg-tests VERSION 0.1 LANGUAGES CXX)
 
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+SET(TalgLibListing
+${CMAKE_SOURCE_DIR}/src/scalar.hpp 
+${CMAKE_SOURCE_DIR}/src/vector.hpp 
+${CMAKE_SOURCE_DIR}/src/matrix.hpp 
+${CMAKE_SOURCE_DIR}/src/quaternion.hpp
+${CMAKE_SOURCE_DIR}/src/transform.hpp
+${CMAKE_SOURCE_DIR}/src/matrix_types.hpp
+${CMAKE_SOURCE_DIR}/src/vector_types.hpp
+${CMAKE_SOURCE_DIR}/src/algos.hpp
+)
 
-#include_directories(src)
-#SET(SrcFolderListing
-#src/matrix.hpp
-#src/vector.hpp
-#src/scalar.hpp
-#src/quaternion.hpp
-#src/algos.hpp
-#src/matrix_types.hpp
-#src/vector_types.hpp
-#)
-
-
-
-
-
-#include_directories(tests)
-SET(TestsFolderListing
+SET(TestsListing
 vector_test.cpp
 matrix_test.cpp
 scalar_test.cpp
 quaternion_test.cpp
+transform_test.cpp
+helpers.h
+helpers.cpp
 main.cpp
 )
 
-add_executable(talg-tests ${TestsFolderListing})
+add_executable(talg-tests ${TestsListing} ${TalgLibListing})
+
+SOURCE_GROUP("headers" FILES ${TalgLibListing})
+SOURCE_GROUP("tests" FILES ${TestsListing})
 
 #find_package(talg CONFIG REQUIRED)
 

@@ -109,7 +109,7 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 		size_t i=0;
 		for(auto& a : xyzw_1234)
 		{
-			CHECK(a == Approx(++i));
+			CHECK(a == Approx(static_cast<double>(++i)));
 		}
 
 

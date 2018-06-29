@@ -162,19 +162,5 @@ TEST_CASE( "Testing TMatrix<R,C,T>", "[matrix.hpp]" )
     REQUIRE(mat2_trace == Approx(1.1+2.2+3.3+4.4));
 	}
 
-  SECTION( " Matrix Transform " )
-  {
-    using T = MatrixTransform<double>;
-
-    T t;
-
-    REQUIRE(t[3][3] == Approx(1.0));
-
-    auto translation_part = t.Trans3x1();
-    auto scale_part_vec = t.Scale3x1();
-    auto scale_part_matrix = t.Scale3x3();
-    auto rotate_part = t.Rotate3x3();
-
-  }
 
 }//end TEST CASE
