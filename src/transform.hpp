@@ -131,24 +131,34 @@ namespace talg
 
 		}
 
-		static constexpr TMat4 ScaleMatrix(T factor)
+		static constexpr TMat4 ScaleMatrix(T x, T y, T z)
 		{
-			return 
+			return
 			{
-				factor, 0, 0, 0,
-				0, factor, 0, 0,
-				0, 0, factor, 0,
+				x, 0, 0, 0,
+				0, y, 0, 0,
+				0, 0, z, 0,
 				0, 0, 0, 1
 			};
 		}
 
+		static constexpr TMat4 ScaleMatrix(T factor)
+		{
+			return ScaleMatrix(factor, factor, factor);
+		}
+
+		static constexpr TMat4 ScaleMatrix(TVec3 t)
+		{
+			return ScaleMatrix(t[0], t[1], t[2]);
+		}
+		
 		static constexpr TMat4 TranslationMatrix(T x, T y, T z)
 		{
 			return 
 			{
-				0, 0, 0, x,
-				0, 0, 0, y,
-				0, 0, 0, z,
+				1, 0, 0, x,
+				0, 1, 0, y,
+				0, 0, 1, z,
 				0, 0, 0, 1
 			};
 		}
@@ -184,49 +194,55 @@ namespace talg
 
 		Transform<T>& RotateX(T angle)
 		{
-			*this = RotationMatrixX(angle);
+			*this *= RotationMatrixX(angle);
 			return *this;
 		}
 
 		Transform<T>& RotateY( T angle)
 		{
-			*this = RotationMatrixY(angle);
+			*this *= RotationMatrixY(angle);
 			return *this;
 		}
 
 		Transform<T>& RotateZ(T angle)
 		{
-			*this = RotationMatrixZ(angle);
+			*this *= RotationMatrixZ(angle);
 			return *this;
 		}
 
 		Transform<T>& Rotate(int axis, T angle)
 		{
-			*this = RotationMatrix(angle);
+			*this *= RotationMatrix(angle);
 			return *this;
 		}
 
 		Transform<T>& Scale(T factor)
 		{
-			*this = ScaleMatrix(factor);
+			*this *= ScaleMatrix(factor);
+			return *this;
+		}
+
+		Transform<T>& Scale(T x, T y, T z)
+		{
+			*this *= ScaleMatrix(x,y,z);
 			return *this;
 		}
 
 		Transform<T>& Translate(T x, T y, T z)
 		{
-			*this = TranslationMatrix(x,y,z);
+			*this *= TranslationMatrix(x,y,z);
 			return *this;
 		}
 
 		Transform<T>& Translate(TVec4 t)
 		{
-			*this = TranslationMatrix(t);
+			*this *= TranslationMatrix(t);
 			return *this;
 		}
 
 		Transform<T>& Translate(TVec3 t)
 		{
-			*this = TranslationMatrix(t);
+			*this *= TranslationMatrix(t);
 			return *this;
 		}
 

@@ -48,8 +48,31 @@ TEST_CASE("Testing Transform<T> ", "[transform.hpp]")
 	SECTION(" Chaining functions ")
 	{
 		HomoTransformDouble t;
-		t.Translate(1.0, 0.0, 0.0)
+		t.Translate(100.0, 0.0, 0.0)
 			.Scale(1000.0)
 			.RotateZ(3.14 / 2.0);
+
+		Matrix44Double mI(Matrix44Double::IDENTITY());
+
+		Matrix44Double mT{
+			1, 0, 0, 100,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		};
+
+		Matrix44Double mS{
+			1000, 0, 0, 0,
+			0, 1000, 0, 0,
+			0, 0, 1000, 0,
+			0, 0, 0, 1
+		};
+
+		Matrix44Double mR = HomoTransformDouble::RotationMatrixZ(3.14 / 2.0);
+
+		// this should be equivalent to the chain operation of a homo-transform
+		Matrix44Double m = mI * mT * mS * mR;
+
+		REQUIRE(eq(m, t));
 	}
 }

@@ -119,18 +119,17 @@ namespace talg
 				M10(m10), M11(m11), M12(m12), M13(m13),
 				M20(m20), M21(m21), M22(m22), M23(m23),
 				M30(m30), M31(m31), M32(m32), M33(m33)
-			{
-			}
+			{}
 
-			TMdata(std::array<std::array<T, 4>, 4>&& m) : adata(m)
-			{
+			TMdata(std::array<std::array<T, 4>, 4>&& m) 
+				: 
+				adata(m)
+			{}
 
-			}
-
-			TMdata(std::array<std::array<T, 4>, 4>& m) : adata(m)
-			{
-
-			}
+			TMdata(std::array<std::array<T, 4>, 4>& m) 
+				: 
+				adata(m)
+			{}
 
 			//template <typename T, typename... Types>
 			//TMdata(T t, Types... ts) : m_Data{ { t, ts... } } {}
@@ -192,7 +191,7 @@ namespace talg
 			};
 		};
 
-
+		// actually operator [][]
 		T* operator[](size_t index_row)
 		{
 			//out of range check DEBUG
@@ -200,6 +199,7 @@ namespace talg
 			return map[index_row];
 		}
 
+		// actually operator [][]
 		const T* operator[](size_t index_row) const
 		{
 			//out of range check DEBUG
@@ -207,8 +207,6 @@ namespace talg
 			return map[index_row];
 		}
 
-
-		//basic
 		T& operator()(size_t index_row, size_t index_col)
 		{
 			//out of range check DEBUG
@@ -222,6 +220,21 @@ namespace talg
 			assert(index_row < R && "INDEX OUT OF RANGE");
 			assert(index_col < C && "INDEX OUT OF RANGE");
 			return map[index_row][index_col];
+		}
+
+		T& operator()(size_t index)
+		{
+			//out of range check DEBUG
+			assert(index < R*C && "INDEX OUT OF RANGE");
+
+			return data[index];
+		}
+
+		const T& operator()(size_t index) const
+		{
+			//out of range check DEBUG
+			assert(index < R*C && "INDEX OUT OF RANGE");
+			return data[index];
 		}
 
 		T& at(size_t index_row, size_t index_col)
@@ -238,6 +251,7 @@ namespace talg
 
 			return map[index_row][index_col];
 		}
+
 		const T& at(size_t index_row, size_t index_col) const
 		{
 			//out of range check DEBUG
@@ -251,6 +265,29 @@ namespace talg
 				throw std::out_of_range();
 
 			return map[index_row][index_col];
+		}
+
+		T& at(size_t index)
+		{
+			//out of range check DEBUG
+			assert(index < R*C && "INDEX OUT OF RANGE");
+
+			if (index >= R*C)
+				throw std::out_of_range();
+
+
+			return data[index];
+		}
+
+		const T& at(size_t index) const
+		{
+			//out of range check DEBUG
+			assert(index < R*C && "INDEX OUT OF RANGE");
+
+			if (index >= R*C)
+				throw std::out_of_range();
+
+			return data[index];
 		}
 
 		constexpr size_t size() const
@@ -282,6 +319,19 @@ namespace talg
 			  }
 
 			return col_vec;
+		}
+
+		template<typename Tcat>
+		TMatrix<4, 4, T> operator*= (const TVector<R, T, Tcat>& rhs)
+		{
+			*this = *this * rhs;
+			return *this;
+		}
+
+		TMatrix<4, 4, T> operator*= (const TMatrix<4, 4, T>& rhs)
+		{
+			*this = *this * rhs;
+			return *this;
 		}
 
 		//dynamic?
@@ -337,35 +387,9 @@ namespace talg
 	TMatrix<4,4,T> operator*(const TMatrix<4,4,T>& lhs, const TMatrix<4,4,T>& rhs)
 	{
 
-		//TODO VS2015 completely got confused and tried to return TVector<16, T, Tcat> !!!!???
-
-		/*
-		return 	{{{
-				lhs.M00*rhs.M00 + lhs.M01*rhs.M10 + lhs.M02*rhs.M20 + lhs.M03*rhs.M30,
-				lhs.M00*rhs.M01 + lhs.M01*rhs.M11 + lhs.M02*rhs.M21 + lhs.M03*rhs.M31,
-				lhs.M00*rhs.M02 + lhs.M01*rhs.M12 + lhs.M02*rhs.M22 + lhs.M03*rhs.M32,
-				lhs.M00*rhs.M03 + lhs.M01*rhs.M13 + lhs.M02*rhs.M23 + lhs.M03*rhs.M33,
-
-				lhs.M10*rhs.M00 + lhs.M11*rhs.M10 + lhs.M12*rhs.M20 + lhs.M13*rhs.M30,
-				lhs.M10*rhs.M01 + lhs.M11*rhs.M11 + lhs.M12*rhs.M21 + lhs.M13*rhs.M31,
-				lhs.M10*rhs.M02 + lhs.M11*rhs.M12 + lhs.M12*rhs.M22 + lhs.M13*rhs.M32,
-				lhs.M10*rhs.M03 + lhs.M11*rhs.M13 + lhs.M12*rhs.M23 + lhs.M13*rhs.M33,
-
-				lhs.M20*rhs.M00 + lhs.M21*rhs.M10 + lhs.M22*rhs.M20 + lhs.M23*rhs.M30,
-				lhs.M20*rhs.M01 + lhs.M21*rhs.M11 + lhs.M22*rhs.M21 + lhs.M23*rhs.M31,
-				lhs.M20*rhs.M02 + lhs.M21*rhs.M12 + lhs.M22*rhs.M22 + lhs.M23*rhs.M32,
-				lhs.M20*rhs.M03 + lhs.M21*rhs.M13 + lhs.M22*rhs.M23 + lhs.M23*rhs.M33,
-
-				lhs.M30*rhs.M00 + lhs.M31*rhs.M10 + lhs.M32*rhs.M20 + lhs.M33*rhs.M30,
-				lhs.M30*rhs.M01 + lhs.M31*rhs.M11 + lhs.M32*rhs.M21 + lhs.M33*rhs.M31,
-				lhs.M30*rhs.M02 + lhs.M31*rhs.M12 + lhs.M32*rhs.M22 + lhs.M33*rhs.M32,
-				lhs.M30*rhs.M03 + lhs.M31*rhs.M13 + lhs.M32*rhs.M23 + lhs.M33*rhs.M33
-			}}};
-		*/
-
 		TMatrix<4, 4, T> m(
-				lhs.M00*rhs.M00 + lhs.M01*rhs.M10 + lhs.M02*rhs.M20 + lhs.M03*rhs.M30,
-				lhs.M00*rhs.M01 + lhs.M01*rhs.M11 + lhs.M02*rhs.M21 + lhs.M03*rhs.M31,
+			lhs.M00*rhs.M00 + lhs.M01*rhs.M10 + lhs.M02*rhs.M20 + lhs.M03*rhs.M30,
+			lhs.M00*rhs.M01 + lhs.M01*rhs.M11 + lhs.M02*rhs.M21 + lhs.M03*rhs.M31,
 			lhs.M00*rhs.M02 + lhs.M01*rhs.M12 + lhs.M02*rhs.M22 + lhs.M03*rhs.M32,
 			lhs.M00*rhs.M03 + lhs.M01*rhs.M13 + lhs.M02*rhs.M23 + lhs.M03*rhs.M33,
 
@@ -524,7 +548,7 @@ namespace talg
 	{
 		for (size_t i = 0; i < lhs.size(); ++i)
 		{
-			if (abs(lhs[i] - rhs[i]) > epsilon) return false;
+			if (abs(lhs(i) - rhs(i)) > epsilon) return false;
 		}
 
 		return true;
@@ -535,7 +559,7 @@ namespace talg
 	{
 		for (size_t i = 0; i < lhs.size(); ++i)
 		{
-			if (abs(lhs[i] - rhs[i]) > epsilon) return false;
+			if (abs(lhs(i) - rhs(i)) > epsilon) return false;
 		}
 
 		return true;
@@ -551,7 +575,7 @@ namespace talg
 	}
 
 	template<size_t R,size_t C, typename T>
-	std::ostream& operator>> (std::istream &is, const TMatrix<R,C,T>& m)
+	std::istream& operator>> (std::istream &is, const TMatrix<R,C,T>& m)
 	{
 		for (auto a : m.data)
 			is >> a;

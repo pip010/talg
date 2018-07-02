@@ -125,12 +125,12 @@ TEST_CASE("Testing Vector<N,T,Tag> ", "[vector.hpp]")
 
 	SECTION("Basic algebra ops:")
 	{
-		Txyzw xyzw_1234_x2{ 2.2, 4.4, 6.6, 8.8 };
-		Txyz xyz_123_x2{ 2.2, 4.4, 6.6, };
+		Txyzw xyzw_1234_x2{ 2, 4, 6, 8 };
+		Txyz xyz_123_x2{ 2, 4, 6, };
 		Tijk ijk_123_x2{ 2, 4, 6 };
 
-		Txyzw xyzw_2345{ 2.1, 3.2, 4.3, 5.4 };
-		Txyz xyz_234{ 2.1, 3.2, 4.3 };
+		Txyzw xyzw_2345{ 2, 3, 4, 5 };
+		Txyz xyz_234{ 2, 3, 4 };
 		Tijk ijk_234{ 2, 3, 4 };
 
 		SECTION("op (vector + vector)")
